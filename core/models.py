@@ -244,3 +244,25 @@ class ZoneConfig(models.Model):
 
     def __str__(self):
         return self.display_name
+    
+
+#----------------------------------------------Phần giời thiệu món ăn-----------------------------------------------------
+class Restaurant(models.Model):
+    name = models.CharField(max_length=200, verbose_name="Tên quán")
+    address = models.CharField(max_length=300, verbose_name="Địa chỉ")
+    image = models.ImageField(upload_to='restaurants/', verbose_name="Ảnh đại diện")
+    rating = models.FloatField(default=0.0, verbose_name="Điểm đánh giá")
+    review_count = models.IntegerField(default=0, verbose_name="Số review")
+    category = models.CharField(max_length=100, verbose_name="Loại hình (Cơm, Phở...)")
+    url_foody = models.URLField(blank=True, null=True, verbose_name="Link Foody (nếu có)")
+
+    def __str__(self):
+        return self.name
+
+class Dish(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Tên món")
+    # Có thể link món ăn với quán ăn nếu muốn logic chặt chẽ hơn
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="dishes", null=True, blank=True)
+
+    def __str__(self):
+        return self.name

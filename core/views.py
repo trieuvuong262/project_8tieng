@@ -1,9 +1,10 @@
+import random
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import F
 from django.utils import timezone
-import random
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login
@@ -13,7 +14,7 @@ from django.http import JsonResponse
 from django.db.models import Count
 from django.db.models import F,OuterRef, Subquery,Prefetch # <--- Thêm import này
 from .models import (
-    UserProfile, PointHistory, ZoneConfig, 
+    Dish, Restaurant, UserProfile, PointHistory, ZoneConfig, 
     Confession, Comment,Reaction,CheckIn,  # <--- Thêm Comment vào đây
     DocumentResource, Product, FoodReview, Notification,
 )
@@ -23,7 +24,7 @@ from .models import PostReport, HiddenPost
 OuterRef, Subquery
 
 from django.core.paginator import Paginator
-
+import requests # <--- Nhớ import thư viện này
 from django.core.files.base import ContentFile
 import urllib.request # Thư viện để tải ảnh từ DiceBear
 
@@ -56,54 +57,79 @@ def get_random_pseudonym():
 # --- 2. MAIN VIEWS ---
 
 def dashboard(request):
-    widget_template = 'core/widgets/guest_widget.html' 
-    
-    # Chỉ khi ĐÃ ĐĂNG NHẬP mới kiểm tra Check-in
+    # --- 1. LOGIC CHECK-IN (Giữ nguyên) ---
+    widget_template = 'core/widgets/guest_widget.html'
     if request.user.is_authenticated:
         today = timezone.now().date()
         has_checked_in = CheckIn.objects.filter(user=request.user, date=today).exists()
-        
-        if has_checked_in:
-            widget_template = 'core/widgets/stats_widget.html'  # Đã điểm danh
-        else:
-            widget_template = 'core/widgets/checkin_widget.html' # Chưa điểm danh
+        widget_template = 'core/widgets/stats_widget.html' if has_checked_in else 'core/widgets/checkin_widget.html'
 
-    # --- 2. CÁC DATA KHÁC (Giữ nguyên) ---
-    food_suggestions = ['Cơm tấm sườn bì', 'Bún đậu mắm tôm', 'Phở bò tái nạm', 'Cơm gà xối mỡ', 'Healthy Salad']
-    import random
-    today_food = random.choice(food_suggestions)
-
-    # Các data tĩnh (Cho cả khách và user)
-    zones = [
-        {'id': 'timekeeping', 'display_name': 'Chấm công', 'icon_name': 'clock', 'color_class': 'bg-blue-50 text-blue-600', 'url': '#'},
-        {'id': 'salary', 'display_name': 'Phiếu lương', 'icon_name': 'banknote', 'color_class': 'bg-green-50 text-green-600', 'url': '#'},
-        {'id': 'social', 'display_name': 'Góc chém gió', 'icon_name': 'message-circle', 'color_class': 'bg-purple-50 text-purple-600', 'url': '/social/'},
-        {'id': 'shop', 'display_name': 'Shop Decor', 'icon_name': 'shopping-bag', 'color_class': 'bg-pink-50 text-pink-600', 'url': '#'},
-    ]
-
-    food_suggestions = ['Cơm tấm', 'Bún đậu', 'Phở bò', 'Healthy Salad']
-    import random
-    today_food = random.choice(food_suggestions)
-
-    office_tools = [
-        {'name': 'PDF to Word', 'icon': 'file-text', 'desc': 'Free'},
-        {'name': 'Tính lương', 'icon': 'calculator', 'desc': 'Chuẩn'},
-    ]
-
-    latest_confessions = Confession.objects.filter(status='APPROVED').select_related('author').order_by('-created_at')[:3]
+    # --- 2. LOGIC MÓN ĂN & QUÁN ĂN (MỚI CẬP NHẬT) ---
     
-    # Top User: Chỉ lấy nếu cần, khách vẫn xem được BXH
-    top_users = UserProfile.objects.select_related('user').order_by('-total_kpi_points')[:5]
+    # A. Lấy danh sách quán ăn (Lấy 8 quán có rating cao nhất)
+    # Nếu chưa có model Restaurant, bạn cần tạo hoặc dùng list giả lập bên dưới
+    try:
+        restaurants = Restaurant.objects.all().order_by('-rating')[:8]
+    except:
+        restaurants = [] # Tránh lỗi nếu chưa migrate DB
 
-    return render(request, 'core/dashboard.html', {
+    # B. Lấy danh sách món ăn cho Vòng quay (Randomizer)
+    # Ưu tiên lấy từ DB, nếu không có thì dùng list cứng
+    try:
+        dishes_db = list(Dish.objects.values_list('name', flat=True))
+    except:
+        dishes_db = []
+        
+    if dishes_db:
+        food_list = dishes_db
+    else:
+        food_list = ['Cơm tấm sườn bì', 'Bún đậu mắm tôm', 'Phở bò tái nạm', 'Cơm gà xối mỡ', 'Healthy Salad', 'Bánh mì chảo', 'Mì ý sốt kem']
+    
+    # Chọn 1 món gợi ý hiển thị tĩnh (cho widget cũ)
+    today_food = random.choice(food_list)
+    
+    # Chuyển list món ăn sang JSON để Javascript dùng cho vòng quay
+    dishes_json = json.dumps(food_list)
+
+    # --- 3. CÁC DATA KHÁC (Giữ nguyên & Bổ sung) ---
+    office_tools = [
+        {'name': 'PDF to Word', 'icon': 'file-text', 'desc': 'Miễn phí'},
+        {'name': 'Tính lương', 'icon': 'calculator', 'desc': 'Gross -> Net'},
+        {'name': 'AI Assistant', 'icon': 'bot', 'desc': 'Trợ lý ảo'},
+        {'name': 'Nén ảnh', 'icon': 'image', 'desc': 'Giảm dung lượng'},
+    ]
+
+    # Decor items (Dữ liệu giả cho phần Shop Decor bên sidebar)
+    decor_items = [
+        {'name': 'Cây kim tiền', 'image': 'https://images.unsplash.com/photo-1599598425947-d3eb10787d65?auto=format&fit=crop&w=300&q=80'},
+        {'name': 'Đèn bàn Pixar', 'image': 'https://images.unsplash.com/photo-1533230536417-66c303f8a484?auto=format&fit=crop&w=300&q=80'},
+    ]
+
+    # Health Tip (Mẹo sức khỏe ngẫu nhiên)
+    health_tips = [
+        {'title': 'Quy tắc 20-20-20', 'content': 'Cứ 20 phút nhìn màn hình, hãy nhìn xa 20 feet (6m) trong 20 giây để bảo vệ mắt.'},
+        {'title': 'Uống nước đúng cách', 'content': 'Đừng đợi khát mới uống. Hãy đặt một cốc nước ngay tại bàn làm việc.'},
+        {'title': 'Tư thế ngồi chuẩn', 'content': 'Giữ lưng thẳng, màn hình ngang tầm mắt để tránh đau cổ vai gáy.'},
+    ]
+    health_tip = random.choice(health_tips)
+
+    latest_confessions = Confession.objects.filter(status='APPROVED').select_related('author').order_by('-created_at')[:2]
+    top_users = UserProfile.objects.select_related('user').order_by('-total_kpi_points')[:3]
+
+    # Context truyền xuống template
+    context = {
         'widget_template': widget_template,
-        'today_food': today_food,
+        'today_food': today_food,       # Món gợi ý đơn lẻ
+        'dishes_json': dishes_json,     # List món cho vòng quay JS (MỚI)
+        'restaurants': restaurants,     # List quán ăn (MỚI)
         'office_tools': office_tools,
         'latest_confessions': latest_confessions,
         'top_users': top_users,
-        'zones': zones
-    })
+        'decor_items': decor_items,
+        'health_tip': health_tip,
+    }
 
+    return render(request, 'core/dashboard.html', context)
 
 @login_required
 def daily_checkin(request):
@@ -669,3 +695,124 @@ def daily_checkin(request):
             messages.info(request, "Bạn đã điểm danh hôm nay rồi.")
             
     return redirect('home')
+
+#-------------------------------------------Ăn trưa-----------------------
+def lunch_page(request):
+    # =========================================================
+    # 1. CẤU HÌNH & THAM SỐ
+    # =========================================================
+    API_KEY = '00600188ac064b66a7940d1ce0d3800a' # Key Geoapify
+    
+    # Lấy tham số
+    lat_param = request.GET.get('lat')
+    lon_param = request.GET.get('lon')
+    radius_param = request.GET.get('radius', '1000')
+    
+    # Lấy số trang từ URL (Mặc định là trang 1)
+    page_db_num = request.GET.get('page_db', 1)
+    page_api_num = request.GET.get('page_api', 1)
+
+    # Validate bán kính
+    try:
+        radius = int(radius_param)
+        if radius < 500: radius = 500
+        if radius > 10000: radius = 10000
+    except:
+        radius = 1000
+
+    # Validate tọa độ
+    if lat_param and lon_param:
+        LAT = lat_param
+        LON = lon_param
+    else:
+        LAT = '10.7716' 
+        LON = '106.7044'
+
+    # Tạo chuỗi tham số gốc để giữ lại khi chuyển trang (tránh mất toạ độ/bán kính)
+    base_params = f"lat={LAT}&lon={LON}&radius={radius}"
+
+    # =========================================================
+    # 2. XỬ LÝ QUÁN NỔI BẬT (DATABASE)
+    # =========================================================
+    try:
+        # Lấy toàn bộ dữ liệu thô từ DB
+        db_all_list = Restaurant.objects.all().order_by('-rating')
+    except:
+        db_all_list = []
+
+    # --- PHÂN TRANG DB ---
+    # Mỗi trang hiện 4 quán
+    paginator_db = Paginator(db_all_list, 8) 
+    # Biến này vẫn tên là db_restaurants như cũ, nhưng giờ là Page Object
+    db_restaurants = paginator_db.get_page(page_db_num)
+
+    # =========================================================
+    # 3. XỬ LÝ QUÁN GẦN ĐÂY (API GEOAPIFY)
+    # =========================================================
+    # Tăng limit lên 24 để có đủ dữ liệu chia thành 3 trang (3 trang x 8 quán)
+    url = f"https://api.geoapify.com/v2/places?categories=catering.restaurant&filter=circle:{LON},{LAT},{radius}&bias=proximity:{LON},{LAT}&limit=24&apiKey={API_KEY}"
+    
+    api_list_raw = [] # List chứa dữ liệu thô từ API
+    
+    food_images = [
+        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80',
+        'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=500&q=80',
+        'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80',
+        'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=500&q=80',
+    ]
+
+    try:
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            features = data.get('features', [])
+            
+            for feature in features:
+                props = feature.get('properties', {})
+                if not props.get('name'): continue
+
+                res = {
+                    'name': props.get('name'),
+                    'address': props.get('address_line2', props.get('address_line1', 'Đang cập nhật')),
+                    'rating': round(random.uniform(4.0, 5.0), 1),
+                    'review_count': random.randint(20, 150),
+                    'category': props.get('datasource', {}).get('raw', {}).get('cuisine', 'Món ngon'),
+                    'image': {'url': random.choice(food_images)},
+                    'url_foody': f"http://googleusercontent.com/maps.google.com/?q={props.get('lat')},{props.get('lon')}",
+                    'is_google': True
+                }
+                api_list_raw.append(res)
+    except Exception as e:
+        print(f"Lỗi API: {e}")
+
+    # --- PHÂN TRANG API ---
+    # Mỗi trang hiện 8 quán
+    paginator_api = Paginator(api_list_raw, 8)
+    # Biến này vẫn tên là api_restaurants như cũ
+    api_restaurants = paginator_api.get_page(page_api_num)
+
+    # =========================================================
+    # 4. DỮ LIỆU VÒNG QUAY
+    # =========================================================
+    try:
+        dishes_db = list(Dish.objects.values_list('name', flat=True))
+        # Lấy tên từ list thô (api_list_raw) để đầy đủ món cho vòng quay
+        api_names = [r['name'] for r in api_list_raw]
+        full_list = dishes_db + api_names
+    except:
+        full_list = []
+        
+    food_list = full_list if full_list else ['Cơm tấm', 'Phở bò', 'Bún chả', 'Mì Ý']
+    dishes_json = json.dumps(food_list[:60]) 
+
+    # =========================================================
+    # 5. TRUYỀN DATA
+    # =========================================================
+    context = {
+        'db_restaurants': db_restaurants,   # Page Object (Quán Admin)
+        'api_restaurants': api_restaurants, # Page Object (Quán API)
+        'dishes_json': dishes_json,
+        'current_radius': radius,
+        'base_params': base_params,         # Chuỗi tham số (lat,lon,radius) để dùng ở nút HTML
+    }
+    return render(request, 'core/lunch.html', context)

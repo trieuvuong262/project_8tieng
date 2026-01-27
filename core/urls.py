@@ -30,4 +30,6 @@ urlpatterns = [
     
     # [MỚI] API Ẩn bài viết
     path('social/hide/<int:post_id>/', views.api_hide_post, name='hide_post'),
+
+    path('trua-nay-an-gi/', views.lunch_page, name='lunch_page'), # <--- Thêm dòng này
 ]
