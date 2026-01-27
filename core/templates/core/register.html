@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - 8Tieng.vn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Gia nhập Hội văn phòng</h1>
+            <p class="text-gray-500 text-sm mt-1">Tạo tài khoản để hóng biến & nhận quà.</p>
+        </div>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}</label>
+                <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" 
+                       required>
+                {% if field.help_text %}
+                <p class="text-xs text-gray-400 mt-1">{{ field.help_text|safe }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                <p class="text-xs text-red-500 mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-lg font-bold hover:bg-indigo-700 transition shadow-md mt-4">
+                Đăng ký ngay
+            </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm text-gray-600">
+            Đã có tài khoản? 
+            <a href="{% url 'login' %}" class="text-indigo-600 font-medium hover:underline">Đăng nhập</a>
+        </div>
+    </div>
+
+</body>
+</html>

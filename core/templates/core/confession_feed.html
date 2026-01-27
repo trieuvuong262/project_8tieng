@@ -1,0 +1,625 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-20 relative items-start animate-fade-in-down">
+
+    <div class="lg:col-span-8 space-y-8"> <div class="sticky top-[70px] z-30 bg-white/90 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/60 p-2 flex justify-between items-center ring-1 ring-gray-900/5 transition-all duration-300">
+            <div class="flex gap-2 w-full overflow-x-auto no-scrollbar px-1">
+                <a href="?filter=newest" class="px-5 py-2.5 rounded-xl text-sm font-bold transition flex items-center gap-2 whitespace-nowrap
+                   {% if active_filter == 'newest' %} bg-indigo-600 text-white shadow-md shadow-indigo-200 ring-1 ring-indigo-500 {% else %} text-gray-500 hover:bg-gray-100 hover:text-gray-900 {% endif %}">
+                    <i data-lucide="clock" class="w-4 h-4"></i> Mới nhất
+                </a>
+                <a href="?filter=drama" class="px-5 py-2.5 rounded-xl text-sm font-bold transition flex items-center gap-2 whitespace-nowrap
+                   {% if active_filter == 'drama' %} bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md shadow-orange-200 ring-1 ring-orange-500 {% else %} text-gray-500 hover:bg-gray-100 hover:text-gray-900 {% endif %}">
+                    <i data-lucide="flame" class="w-4 h-4"></i> Drama 🔥
+                </a>
+                <a href="?filter=top" class="px-5 py-2.5 rounded-xl text-sm font-bold transition flex items-center gap-2 whitespace-nowrap
+                   {% if active_filter == 'top' %} bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-200 ring-1 ring-pink-500 {% else %} text-gray-500 hover:bg-gray-100 hover:text-gray-900 {% endif %}">
+                    <i data-lucide="heart" class="w-4 h-4"></i> Top KPI
+                </a>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="bg-gradient-to-b from-indigo-50 to-white rounded-[2rem] shadow-lg shadow-indigo-100 border border-indigo-100 overflow-hidden relative group transition-all duration-300 hover:shadow-xl">
+            <div class="h-1.5 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+            
+        <form id="post-form" method="POST" class="p-6 md:p-8">
+                    {% csrf_token %}
+                <input type="hidden" name="submit_confession" value="1">
+                
+                <div class="flex gap-5 mb-5">
+                    <div class="w-14 h-14 rounded-full bg-white border-2 border-indigo-100 p-0.5 flex-shrink-0 shadow-sm">
+                        <div class="w-full h-full rounded-full overflow-hidden">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" class="w-full h-full object-cover">
+                            {% else %}
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ user.username }}" class="w-full h-full">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <textarea id="input-content" name="content" rows="3" class="w-full bg-white hover:bg-white focus:bg-white border border-gray-200 rounded-2xl px-5 py-4 text-gray-800 placeholder-gray-400 text-lg resize-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition-all duration-300 shadow-inner" placeholder="Hôm nay công sở có biến gì không? Kể ẩn danh nghe nào..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="pl-20 grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <div class="relative group/input">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i data-lucide="venetian-mask" class="w-4 h-4 text-gray-400 group-hover/input:text-indigo-500 transition"></i>
+                        </div>
+                        <input id="input-pseudo" type="text" name="pseudonym" class="w-full bg-white border border-gray-200 focus:border-indigo-500 rounded-xl py-3 pl-11 pr-4 text-sm focus:ring-2 focus:ring-indigo-100 transition shadow-sm" placeholder="Bút danh (Mặc định: {{ user.username }})">
+                    </div>
+                    
+                    <div class="relative group/input">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i data-lucide="building-2" class="w-4 h-4 text-gray-400 group-hover/input:text-indigo-500 transition"></i>
+                        </div>
+                        <input id="input-company" type="text" name="company_name" class="w-full bg-white border border-gray-200 focus:border-indigo-500 rounded-xl py-3 pl-11 pr-4 text-sm focus:ring-2 focus:ring-indigo-100 transition shadow-sm" placeholder="Tên công ty (Tuỳ chọn)">
+                    </div>
+                </div>
+                <div class="pl-20 flex justify-between items-center pt-4 border-t border-indigo-50/50">
+                    <div class="flex flex-col"> <div class="flex gap-2">
+                        </div>
+
+                        <label class="flex items-center gap-2 cursor-pointer group select-none">
+                            <input type="checkbox" name="is_anonymous" class="peer sr-only" checked> <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600 relative"></div>
+                            
+                            <span class="text-xs font-bold text-gray-500 peer-checked:text-indigo-600 transition">
+                                Chế độ Ẩn danh (Hiện Avatar giả)
+                            </span>
+                        </label>
+
+                    </div>
+                    <button type="button" onclick="openPreview()" class="bg-gray-900 hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-gray-300 hover:shadow-indigo-200 transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2.5 text-sm">
+                        <span>Xem trước & Đăng</span>
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <div class="rounded-[2rem] p-8 text-center text-white shadow-xl shadow-indigo-200 relative overflow-hidden isolate">
+            <div class="absolute inset-0 bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-700 z-[-2]"></div>
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-[-1]"></div>
+            
+            <div class="relative z-10 max-w-lg mx-auto">
+                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner">
+                    <i data-lucide="lock" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 tracking-tight">Khu vực "Tám" Ẩn Danh</h3>
+                <p class="text-indigo-100 mb-8 text-sm leading-relaxed">Đăng nhập để chia sẻ những câu chuyện thầm kín nơi công sở. Danh tính của bạn được bảo mật tuyệt đối.</p>
+                
+                <div class="flex justify-center gap-4">
+                    <a href="{% url 'login' %}" class="bg-white text-indigo-700 font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:bg-gray-50 transition transform hover:-translate-y-1">Đăng nhập</a>
+                    <a href="{% url 'register' %}" class="bg-indigo-800/40 backdrop-blur-md border border-indigo-400/30 text-white font-bold py-3 px-8 rounded-xl hover:bg-indigo-800/60 transition">Đăng ký</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="space-y-8">
+            {% for post in confessions %}
+            <div id="post-{{ post.id }}" class="bg-white rounded-[2rem] shadow-[0_2px_20px_-5px_rgba(0,0,0,0.05)] border border-gray-100 overflow-visible hover:border-indigo-100 transition duration-300">
+                
+                <div class="p-6 pb-2 flex justify-between items-start">
+                    <div class="flex items-center gap-4">
+                        <div class="relative">
+                            {% if post.is_anonymous %}
+                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center text-indigo-600 font-bold text-lg shadow-sm border border-indigo-100 cursor-default">
+                                    {{ post.pseudonym|slice:":1"|upper }}
+                                </div>
+                                <div class="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
+                                    <div class="bg-gray-400 w-2.5 h-2.5 rounded-full border-2 border-white" title="Chế độ Ẩn danh"></div>
+                                </div>
+                            {% else %}
+                                <div class="w-12 h-12 rounded-2xl p-0.5 shadow-sm border border-indigo-100 overflow-hidden bg-white">
+                                    <a href="#"> {% if post.author.profile.avatar %}
+                                            <img src="{{ post.author.profile.avatar.url }}" class="w-full h-full object-cover rounded-xl">
+                                        {% else %}
+                                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ post.author.username }}" class="w-full h-full object-cover rounded-xl">
+                                        {% endif %}
+                                    </a>
+                                </div>
+                                <div class="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
+                                    <div class="bg-green-500 w-2.5 h-2.5 rounded-full border-2 border-white" title="Công khai"></div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-bold text-gray-900 text-[15px]">{{ post.pseudonym }}</span>
+                                {% if post.company_name %}
+                                    <span class="text-[10px] bg-gray-50 text-gray-500 px-2 py-0.5 rounded-md border border-gray-200 font-medium flex items-center gap-1">
+                                        <i data-lucide="building-2" class="w-3 h-3"></i> {{ post.company_name }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-400 mt-1 font-medium">
+                                <span>{{ post.created_at|timesince }} trước</span>
+                                <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                                <span class="flex items-center gap-1"><i data-lucide="globe" class="w-3 h-3"></i> Ẩn danh</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative smart-menu-wrapper z-10">
+                        <button class="text-gray-300 hover:bg-gray-100 hover:text-gray-600 p-2 rounded-xl transition">
+                            <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                        </button>
+                        <div class="smart-menu-dropdown absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 hidden overflow-hidden animate-fade-in-down origin-top-right ring-1 ring-black/5">
+                            <div class="p-1">
+                                <button onclick="openReportModal({{ post.id }})" class="w-full text-left px-4 py-2.5 text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-600 flex items-center gap-3 transition rounded-xl font-medium">
+                                    <i data-lucide="flag" class="w-4 h-4"></i> Báo cáo vi phạm
+                                </button>
+                                {% if user.is_authenticated %}
+                                <form action="{% url 'hide_post' post.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-3 transition rounded-xl font-medium" onclick="return confirm('Ẩn bài này khỏi feed của bạn?')">
+                                        <i data-lucide="eye-off" class="w-4 h-4"></i> Ẩn bài viết này
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-6 py-2">
+                    <div class="text-gray-800 text-[15px] leading-relaxed whitespace-pre-line font-normal">
+                        {{ post.content }}
+                    </div>
+                </div>
+
+                <div class="px-6">
+                    <div class="flex items-center justify-between py-3 border-b border-gray-50 text-xs text-gray-500 font-medium">
+                        <div class="flex items-center gap-4">
+                            <span id="love-count-{{ post.id }}" class="flex items-center gap-1.5 {% if post.loves_count > 0 %} text-pink-600 {% endif %}">
+                                <div class="bg-pink-100 p-1 rounded-full"><i data-lucide="heart" class="w-3 h-3 fill-pink-500 text-pink-500"></i></div> 
+                                {{ post.loves_count }}
+                            </span>
+                            <span id="angry-count-{{ post.id }}" class="flex items-center gap-1.5 {% if post.angry_count > 0 %} text-orange-600 {% endif %}">
+                                <div class="bg-orange-100 p-1 rounded-full"><i data-lucide="frown" class="w-3 h-3 fill-orange-500 text-orange-500"></i></div>
+                                {{ post.angry_count }}
+                            </span>
+                        </div>
+                        <span class="hover:underline cursor-pointer" onclick="toggleComment({{ post.id }})">{{ post.comments.count }} bình luận</span>
+                    </div>
+
+                    <div class="flex gap-2 py-2">
+                        <button id="btn-love-{{ post.id }}" onclick="reactPost({{ post.id }}, 'LOVE')" 
+                            class="flex-1 py-2.5 rounded-xl transition active:scale-95 flex items-center justify-center gap-2 text-sm font-bold group
+                            {% if post.current_user_reaction == 'LOVE' %} bg-pink-50 text-pink-600 {% else %} text-gray-500 hover:bg-gray-50 hover:text-gray-700 {% endif %}">
+                            <i data-lucide="heart" class="w-5 h-5 group-hover:scale-110 transition {% if post.current_user_reaction == 'LOVE' %} fill-current {% endif %}"></i>
+                            Thả tim
+                        </button>
+
+                        <button id="btn-angry-{{ post.id }}" onclick="reactPost({{ post.id }}, 'ANGRY')" 
+                            class="flex-1 py-2.5 rounded-xl transition active:scale-95 flex items-center justify-center gap-2 text-sm font-bold group
+                            {% if post.current_user_reaction == 'ANGRY' %} bg-orange-50 text-orange-600 {% else %} text-gray-500 hover:bg-gray-50 hover:text-gray-700 {% endif %}">
+                            <i data-lucide="frown" class="w-5 h-5 group-hover:scale-110 transition {% if post.current_user_reaction == 'ANGRY' %} fill-current {% endif %}"></i>
+                            Phẫn nộ
+                        </button>
+
+                        <button onclick="toggleComment({{ post.id }})" 
+                            class="flex-1 py-2.5 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-700 font-bold text-sm flex items-center justify-center gap-2 transition active:scale-95 group">
+                            <i data-lucide="message-circle" class="w-5 h-5 group-hover:scale-110 transition"></i>
+                            Bình luận
+                        </button>
+                    </div>
+                </div>
+
+                <div id="comment-box-{{ post.id }}" class="hidden bg-gray-50/50 p-5 border-t border-gray-100 animate-fade-in-down rounded-b-[2rem]">
+                    
+                    <form action="{% url 'submit_comment' post.id %}" method="POST" class="flex gap-3 items-start mb-6">
+                        {% csrf_token %}
+                        <div class="w-9 h-9 rounded-full bg-white border border-gray-200 flex items-center justify-center flex-shrink-0 shadow-sm mt-1">
+                            {% if user.is_authenticated and user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" class="w-full h-full rounded-full object-cover">
+                            {% else %}
+                                <i data-lucide="user" class="w-5 h-5 text-gray-400"></i>
+                            {% endif %}
+                        </div>
+                        <div class="flex-1 relative group">
+                            <input type="text" name="comment_content" 
+                                class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-4 pr-12 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition shadow-sm group-hover:border-gray-300" 
+                                placeholder="Viết bình luận..." required>
+                            
+                            <button type="submit" class="absolute right-2 top-1.5 p-1.5 bg-gray-100 text-gray-500 rounded-xl hover:bg-indigo-600 hover:text-white transition">
+                                <i data-lucide="send-horizontal" class="w-4 h-4"></i>
+                            </button>
+                            
+                            {% if user.is_authenticated %}
+                            <div class="absolute -bottom-6 left-1">
+                                <label class="flex items-center gap-1.5 text-[10px] text-gray-400 cursor-pointer hover:text-indigo-600 transition select-none">
+                                    <input type="checkbox" name="is_anonymous" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 w-3 h-3" checked>
+                                    <span>Bình luận ẩn danh</span>
+                                </label>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </form>
+
+                    {% if post.comments.all %}
+                    <div class="space-y-4 pt-2">
+                        {% for cmt in post.comments.all %}
+                            {% if not cmt.parent %}
+                            <div class="flex gap-3 group/cmt relative">
+                                {% if cmt.replies.all %}
+                                <div class="absolute left-4 top-10 bottom-0 w-0.5 bg-gray-200 group-hover/cmt:bg-gray-300 transition"></div>
+                                {% endif %}
+
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 border border-white shadow-sm z-10 overflow-hidden
+                                    {% if cmt.is_anonymous or not cmt.author %} bg-gradient-to-br from-gray-100 to-gray-200 text-gray-500 {% else %} bg-white {% endif %}">
+                                    
+                                    {% if cmt.is_anonymous or not cmt.author %}
+                                        <i data-lucide="venetian-mask" class="w-3.5 h-3.5"></i> 
+                                    {% else %}
+                                        {% if cmt.author.profile.avatar %}
+                                            <img src="{{ cmt.author.profile.avatar.url }}" class="w-full h-full object-cover">
+                                        {% else %}
+                                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ cmt.author.username }}" class="w-full h-full object-cover">
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+
+                                <div class="flex-1">
+                                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 inline-block min-w-[150px] relative group-hover/cmt:border-gray-200 transition">
+                                        <div class="flex justify-between items-baseline gap-4 mb-0.5">
+                                            <span class="font-bold text-xs {% if cmt.is_anonymous or not cmt.author %} text-gray-500 {% else %} text-indigo-900 {% endif %}">
+                                                {% if cmt.is_anonymous or not cmt.author %} Người bí ẩn {% else %} {{ cmt.author.username }} {% endif %}
+                                            </span>
+                                            <span class="text-[10px] text-gray-300">{{ cmt.created_at|timesince }}</span>
+                                        </div>
+                                        <p class="text-sm text-gray-700 leading-snug break-words">{{ cmt.content }}</p>
+                                    </div>
+
+                                    <div class="flex gap-4 ml-2 mt-1 items-center">
+                                        <button onclick="showReplyForm({{ cmt.id }})" class="text-[11px] font-bold text-gray-400 hover:text-indigo-600 transition">Trả lời</button>
+                                    </div>
+
+                                    <form id="reply-form-{{ cmt.id }}" action="{% url 'submit_comment' post.id %}" method="POST" class="hidden mt-3 animate-fade-in-down flex gap-2">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="parent_id" value="{{ cmt.id }}">
+                                        <input type="text" name="comment_content" class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:border-indigo-500" placeholder="Viết câu trả lời..." required>
+                                        <button type="submit" class="bg-indigo-600 text-white text-xs px-3 py-1 rounded-lg hover:bg-indigo-700 flex-shrink-0">Gửi</button>
+                                        {% if user.is_authenticated %}
+                                        <div class="flex items-center">
+                                            <input type="checkbox" name="is_anonymous" title="Trả lời ẩn danh" class="rounded w-3 h-3 text-indigo-600" checked>
+                                        </div>
+                                        {% endif %}
+                                    </form>
+
+                                    {% if cmt.replies.all %}
+                                    <div class="mt-3 space-y-3">
+                                        {% for reply in cmt.replies.all %}
+                                        <div class="flex gap-2 items-start">
+                                            <div class="w-6 h-6 rounded-full {% if reply.is_anonymous %} bg-gray-100 text-gray-500 {% else %} bg-indigo-50 text-indigo-500 {% endif %} flex items-center justify-center text-[8px] font-bold flex-shrink-0 z-10 border border-white">
+                                                {% if reply.is_anonymous %} <i data-lucide="user-x" class="w-3 h-3"></i> {% else %} {{ reply.author.username|slice:":1"|upper }} {% endif %}
+                                            </div>
+                                            <div>
+                                                <div class="bg-gray-100/80 px-3 py-1.5 rounded-2xl rounded-tl-none inline-block">
+                                                    <span class="font-bold text-[11px] {% if reply.is_anonymous %} text-gray-500 {% else %} text-indigo-800 {% endif %} block">
+                                                        {% if reply.is_anonymous %} Ẩn danh {% else %} {{ reply.author.username }} {% endif %}
+                                                    </span>
+                                                    <span class="text-xs text-gray-700">{{ reply.content }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-20 bg-white rounded-[2rem] border border-dashed border-gray-200">
+                <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="coffee" class="w-10 h-10 text-gray-300"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800">Yên tĩnh quá...</h3>
+                <p class="text-gray-400 text-sm mt-1">Chưa có bài viết nào ở bộ lọc này.</p>
+                <a href="?filter=newest" class="inline-block mt-4 text-indigo-600 text-sm font-bold hover:underline">Xem tất cả bài viết</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% if confessions.has_other_pages %}
+        <div class="flex justify-center items-center gap-2 mt-8 pb-4">
+            
+            {% if confessions.has_previous %}
+            <a href="?page={{ confessions.previous_page_number }}&filter={{ active_filter }}" 
+               class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition shadow-sm flex items-center gap-1">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i> Trước
+            </a>
+            {% else %}
+            <span class="px-4 py-2 bg-gray-50 border border-gray-100 rounded-xl text-sm font-bold text-gray-300 cursor-not-allowed flex items-center gap-1">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i> Trước
+            </span>
+            {% endif %}
+
+            <div class="hidden sm:flex gap-1">
+                {% for i in confessions.paginator.page_range %}
+                    {% if confessions.number == i %}
+                        <span class="w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-600 text-white text-sm font-bold shadow-md shadow-indigo-200 cursor-default">
+                            {{ i }}
+                        </span>
+                    {% elif i > confessions.number|add:'-3' and i < confessions.number|add:'3' %}
+                        <a href="?page={{ i }}&filter={{ active_filter }}" 
+                           class="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-600 text-sm font-bold hover:bg-gray-50 hover:text-indigo-600 transition">
+                            {{ i }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            <span class="sm:hidden text-xs font-bold text-gray-500 px-2">
+                Trang {{ confessions.number }} / {{ confessions.paginator.num_pages }}
+            </span>
+
+            {% if confessions.has_next %}
+            <a href="?page={{ confessions.next_page_number }}&filter={{ active_filter }}" 
+               class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition shadow-sm flex items-center gap-1">
+                Sau <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </a>
+            {% else %}
+            <span class="px-4 py-2 bg-gray-50 border border-gray-100 rounded-xl text-sm font-bold text-gray-300 cursor-not-allowed flex items-center gap-1">
+                Sau <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </span>
+            {% endif %}
+            
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="lg:col-span-4 space-y-6 hidden lg:block sticky top-24">
+
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-bl-full -mr-4 -mt-4 z-0"></div>
+            <h3 class="font-bold text-gray-800 flex items-center gap-2 mb-4 relative z-10">
+                <div class="p-1.5 bg-green-100 text-green-600 rounded-lg"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+                Nội quy "Hội Tám"
+            </h3>
+            <ul class="space-y-3 text-sm text-gray-600 relative z-10">
+                <li class="flex gap-3 items-start">
+                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold mt-0.5">1</span>
+                    <span class="leading-snug">Tôn trọng đồng nghiệp, <strong>không nêu đích danh</strong> để công kích cá nhân.</span>
+                </li>
+                <li class="flex gap-3 items-start">
+                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold mt-0.5">2</span>
+                    <span class="leading-snug">Không bàn luận chính trị, tôn giáo hoặc tiết lộ bí mật kinh doanh.</span>
+                </li>
+                <li class="flex gap-3 items-start">
+                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold mt-0.5">3</span>
+                    <span class="leading-snug">Chia sẻ tích cực & hài hước sẽ nhận được nhiều ❤️ hơn.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-800 flex items-center gap-2 mb-4">
+                <div class="p-1.5 bg-blue-100 text-blue-600 rounded-lg"><i data-lucide="wrench" class="w-5 h-5"></i></div>
+                Công cụ tiện ích
+            </h3>
+            <div class="grid grid-cols-2 gap-3">
+                <a href="#" class="block p-3 rounded-2xl bg-gray-50 hover:bg-blue-50 hover:border-blue-100 border border-transparent transition group">
+                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm mb-2 group-hover:scale-110 transition">
+                        <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i>
+                    </div>
+                    <div class="text-xs font-bold text-gray-700 group-hover:text-blue-700">PDF to Word</div>
+                    <div class="text-[10px] text-gray-400 mt-0.5">Chuyển đổi nhanh</div>
+                </a>
+                <a href="#" class="block p-3 rounded-2xl bg-gray-50 hover:bg-green-50 hover:border-green-100 border border-transparent transition group">
+                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm mb-2 group-hover:scale-110 transition">
+                        <i data-lucide="calculator" class="w-4 h-4 text-green-600"></i>
+                    </div>
+                    <div class="text-xs font-bold text-gray-700 group-hover:text-green-700">Tính Lương</div>
+                    <div class="text-[10px] text-gray-400 mt-0.5">Gross -> Net</div>
+                </a>
+                <a href="#" class="block p-3 rounded-2xl bg-gray-50 hover:bg-purple-50 hover:border-purple-100 border border-transparent transition group">
+                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm mb-2 group-hover:scale-110 transition">
+                        <i data-lucide="bot" class="w-4 h-4 text-purple-600"></i>
+                    </div>
+                    <div class="text-xs font-bold text-gray-700 group-hover:text-purple-700">AI Assistant</div>
+                    <div class="text-[10px] text-gray-400 mt-0.5">Viết mail, dịch</div>
+                </a>
+                <a href="#" class="block p-3 rounded-2xl bg-gray-50 hover:bg-orange-50 hover:border-orange-100 border border-transparent transition group">
+                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm mb-2 group-hover:scale-110 transition">
+                        <i data-lucide="image" class="w-4 h-4 text-orange-600"></i>
+                    </div>
+                    <div class="text-xs font-bold text-gray-700 group-hover:text-orange-700">Nén Ảnh</div>
+                    <div class="text-[10px] text-gray-400 mt-0.5">Giảm dung lượng</div>
+                </a>
+            </div>
+            <a href="#" class="block text-center mt-4 text-xs font-bold text-gray-400 hover:text-indigo-600 transition">Xem thêm công cụ &rarr;</a>
+        </div>
+
+        <div class="text-center text-xs text-gray-400">
+            <p>&copy; 2024 <strong>8Tieng.vn</strong> Inc.</p>
+            <div class="flex justify-center gap-3 mt-2">
+                <a href="#" class="hover:text-gray-600">Điều khoản</a>
+                <a href="#" class="hover:text-gray-600">Bảo mật</a>
+                <a href="#" class="hover:text-gray-600">Liên hệ</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="preview-modal" class="hidden fixed inset-0 z-[60] bg-gray-900/60 flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+    <div class="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl animate-fade-in-down border border-white/20">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <i data-lucide="eye" class="w-5 h-5 text-indigo-600"></i> Xem trước
+        </h3>
+        
+        <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm mb-6 relative overflow-hidden">
+             <div class="h-1 absolute top-0 left-0 right-0 bg-gradient-to-r from-indigo-400 to-purple-400"></div>
+             <div class="flex items-center gap-3 mb-3">
+                 <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold shadow-inner">
+                     <span id="preview-avatar">A</span>
+                 </div>
+                 <div>
+                     <div class="flex items-center gap-2">
+                         <span id="preview-name" class="font-bold text-gray-800 text-sm">Tên</span>
+                         <span id="preview-company" class="hidden bg-gray-100 text-gray-500 text-[10px] px-2 py-0.5 rounded-md font-bold"></span>
+                     </div>
+                     <div class="text-xs text-gray-400">Vừa xong</div>
+                 </div>
+             </div>
+             <div id="preview-content" class="text-gray-700 text-sm whitespace-pre-line leading-relaxed"></div>
+        </div>
+        
+        <div class="flex gap-3">
+            <button onclick="document.getElementById('preview-modal').classList.add('hidden')" class="flex-1 px-4 py-3 rounded-xl text-gray-600 bg-gray-50 hover:bg-gray-100 font-bold text-sm transition">Sửa lại</button>
+            <button onclick="document.getElementById('post-form').submit()" class="flex-1 px-4 py-3 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-bold text-sm shadow-lg shadow-indigo-200 transition">
+                Đăng ngay
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="report-modal" class="hidden fixed inset-0 z-[60] bg-gray-900/60 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl animate-fade-in-down">
+        <h3 class="text-lg font-bold text-orange-600 mb-2 flex items-center gap-2">
+            <div class="p-1.5 bg-orange-100 rounded-lg"><i data-lucide="flag" class="w-5 h-5"></i></div>
+            Báo cáo vi phạm
+        </h3>
+        <p class="text-sm text-gray-500 mb-4">Nội dung này vi phạm nguyên tắc cộng đồng?</p>
+        
+        <form id="report-form" method="POST" action="">
+            {% csrf_token %}
+            <textarea name="reason" rows="3" class="w-full bg-gray-50 border-transparent rounded-xl p-3 text-sm mb-4 focus:ring-2 focus:ring-orange-200 focus:bg-white transition resize-none" placeholder="Hãy cho chúng tôi biết lý do..." required></textarea>
+            
+            <div class="flex gap-3">
+                <button type="button" onclick="document.getElementById('report-modal').classList.add('hidden')" class="flex-1 py-2.5 text-gray-500 hover:bg-gray-100 rounded-xl text-sm font-bold transition">Hủy</button>
+                <button type="submit" class="flex-1 py-2.5 bg-orange-500 text-white hover:bg-orange-600 rounded-xl text-sm font-bold shadow-lg shadow-orange-200 transition">Gửi báo cáo</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // 1. Toggle Comment Box
+    function toggleComment(postId) {
+        document.getElementById(`comment-box-${postId}`).classList.toggle('hidden');
+    }
+
+    // 2. Show Reply Form
+    function showReplyForm(commentId) {
+        document.querySelectorAll('[id^="reply-form-"]').forEach(el => el.classList.add('hidden'));
+        const form = document.getElementById(`reply-form-${commentId}`);
+        form.classList.remove('hidden');
+        form.querySelector('input').focus();
+    }
+
+    // 3. Logic Preview
+    function openPreview() {
+        const content = document.getElementById('input-content').value;
+        if(!content.trim()) { alert('Bạn chưa viết nội dung gì cả!'); return; }
+
+        let pseudo = document.getElementById('input-pseudo').value;
+        const company = document.getElementById('input-company').value;
+        
+        if(!pseudo.trim()) pseudo = "{{ user.username }}";
+
+        document.getElementById('preview-content').innerText = content;
+        document.getElementById('preview-name').innerText = pseudo;
+        document.getElementById('preview-avatar').innerText = pseudo.charAt(0).toUpperCase();
+        
+        const companyBadge = document.getElementById('preview-company');
+        if(company.trim()) {
+            companyBadge.innerText = company;
+            companyBadge.classList.remove('hidden');
+        } else {
+            companyBadge.classList.add('hidden');
+        }
+
+        document.getElementById('preview-modal').classList.remove('hidden');
+    }
+
+    // 4. Logic Report
+    function openReportModal(postId) {
+        document.getElementById('report-form').action = `/social/report/${postId}/`;
+        document.getElementById('report-modal').classList.remove('hidden');
+    }
+
+    // 5. Logic React AJAX
+    function reactPost(postId, type) {
+        const btnLove = document.getElementById(`btn-love-${postId}`);
+        const btnAngry = document.getElementById(`btn-angry-${postId}`);
+        
+        fetch(`/social/api/react/${postId}/${type}/`, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': '{{ csrf_token }}', 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`love-count-${postId}`).innerHTML = `
+                    <div class="bg-pink-100 p-1 rounded-full"><i data-lucide="heart" class="w-3 h-3 fill-pink-500 text-pink-500"></i></div> ${data.loves}`;
+                document.getElementById(`angry-count-${postId}`).innerHTML = `
+                    <div class="bg-orange-100 p-1 rounded-full"><i data-lucide="frown" class="w-3 h-3 fill-orange-500 text-orange-500"></i></div> ${data.angries}`;
+                
+                resetButton(btnLove);
+                resetButton(btnAngry);
+                if (data.action !== 'removed') {
+                    if (type === 'LOVE') activeButton(btnLove, 'pink');
+                    else activeButton(btnAngry, 'orange');
+                }
+                lucide.createIcons();
+            }
+        });
+    }
+
+    function resetButton(btn) {
+        if(!btn) return;
+        btn.className = "flex-1 py-2.5 rounded-xl transition active:scale-95 flex items-center justify-center gap-2 text-sm font-bold text-gray-500 hover:bg-gray-50 hover:text-gray-700";
+        const icon = btn.querySelector('i');
+        if(icon) icon.classList.remove('fill-current');
+    }
+    
+    function activeButton(btn, color) {
+        if(!btn) return;
+        if (color === 'pink') {
+            btn.className = "flex-1 py-2.5 rounded-xl transition active:scale-95 flex items-center justify-center gap-2 text-sm font-bold bg-pink-50 text-pink-600";
+        } else {
+            btn.className = "flex-1 py-2.5 rounded-xl transition active:scale-95 flex items-center justify-center gap-2 text-sm font-bold bg-orange-50 text-orange-600";
+        }
+        const icon = btn.querySelector('i');
+        if(icon) icon.classList.add('fill-current');
+    }
+
+    // 6. Logic Smart Menu (Dropdown)
+    document.addEventListener('DOMContentLoaded', function() {
+        const menus = document.querySelectorAll('.smart-menu-wrapper');
+        menus.forEach(wrapper => {
+            const dropdown = wrapper.querySelector('.smart-menu-dropdown');
+            let timeoutId;
+            if (dropdown) {
+                wrapper.addEventListener('mouseenter', () => {
+                    clearTimeout(timeoutId);
+                    document.querySelectorAll('.smart-menu-dropdown').forEach(el => {
+                        if(el !== dropdown) el.classList.add('hidden');
+                    });
+                    dropdown.classList.remove('hidden');
+                });
+                wrapper.addEventListener('mouseleave', () => {
+                    timeoutId = setTimeout(() => {
+                        dropdown.classList.add('hidden');
+                    }, 300);
+                });
+            }
+        });
+    });
+</script>
+
+<style>
+    /* Ẩn scrollbar nhưng vẫn scroll được */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+{% endblock %}
