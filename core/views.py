@@ -90,7 +90,7 @@ def dashboard(request):
         # Nếu chưa có quote cho buổi này, lấy câu mặc định
         daily_quote = {
             "content": "Chúc bạn một ngày làm việc hiệu quả và tràn đầy năng lượng!",
-            "author": "Hệ thống"
+            "author": "Hệ thống",
         }
 
     widget_template = "core/widgets/guest_widget.html"
@@ -131,24 +131,26 @@ def dashboard(request):
     dishes_json = json.dumps(food_list)
 
     office_tools = [
-        {'name': 'Chuyển File', 'desc': 'PDF, Word, Excel...', 'icon': 'file-type-2'},
-        {'name': 'OCR Ảnh', 'desc': 'Lấy text từ hình ảnh', 'icon': 'scan-text'},
-        {'name': 'Nén Ảnh', 'desc': 'Giảm dung lượng nhanh', 'icon': 'image-minus'},
-        {'name': 'AI Assistant', 'desc': 'Chat với AI', 'icon': 'bot'},
-        {'name': 'Xóa Background', 'desc': 'Tách nền ảnh', 'icon': 'eraser'},
-        {'name': 'Tạo mã QR', 'desc': 'Tạo QR link, Wifi...', 'icon': 'qr-code'},
-        {'name': 'Ghi chú', 'desc': 'Note nhanh ý tưởng', 'icon': 'sticky-note'},
-        {'name': 'File Mẫu', 'desc': 'Hợp đồng, đơn từ...', 'icon': 'files'},
-        {'name': 'Download', 'desc': 'Bộ cài phần mềm', 'icon': 'download-cloud'},
-        {'name': 'Lương Net', 'desc': 'Tính Gross sang Net', 'icon': 'calculator'},
-        {'name': 'BHTN', 'desc': 'Bảo hiểm thất nghiệp', 'icon': 'landmark'},
-        {'name': 'Giờ Về', 'desc': 'Đếm ngược tan làm', 'icon': 'timer'},
+        {"name": "Chuyển File", "desc": "PDF, Word, Excel...", "icon": "file-type-2"},
+        {"name": "OCR Ảnh", "desc": "Lấy text từ hình ảnh", "icon": "scan-text"},
+        {"name": "Nén Ảnh", "desc": "Giảm dung lượng nhanh", "icon": "image-minus"},
+        {"name": "AI Assistant", "desc": "Chat với AI", "icon": "bot"},
+        {"name": "Xóa Background", "desc": "Tách nền ảnh", "icon": "eraser"},
+        {"name": "Tạo mã QR", "desc": "Tạo QR link, Wifi...", "icon": "qr-code"},
+        {"name": "Ghi chú", "desc": "Note nhanh ý tưởng", "icon": "sticky-note"},
+        {"name": "File Mẫu", "desc": "Hợp đồng, đơn từ...", "icon": "files"},
+        {"name": "Download", "desc": "Bộ cài phần mềm", "icon": "download-cloud"},
+        {"name": "Lương Net", "desc": "Tính Gross sang Net", "icon": "calculator"},
+        {"name": "BHTN", "desc": "Bảo hiểm thất nghiệp", "icon": "landmark"},
+        {"name": "Giờ Về", "desc": "Đếm ngược tan làm", "icon": "timer"},
     ]
 
-    decor_items = Product.objects.filter(is_active=True, is_hot=True).order_by('-id')[:4]   
+    decor_items = Product.objects.filter(is_active=True, is_hot=True).order_by("-id")[
+        :4
+    ]
 
     if decor_items.count() < 4:
-            decor_items = Product.objects.filter(is_active=True).order_by('-id')[:4]
+        decor_items = Product.objects.filter(is_active=True).order_by("-id")[:4]
 
     health_tips = [
         {
@@ -176,10 +178,10 @@ def dashboard(request):
     )[:3]
 
     context = {
-        "time_mode": time_mode,         # Thêm cái này
-        "greeting_title": greeting_title, # Thêm cái này
-        "greeting_sub": greeting_sub,     # Thêm cái này
-        "daily_quote": daily_quote,       # CỰC KỲ QUAN TRỌNG: Thêm cái này
+        "time_mode": time_mode,  # Thêm cái này
+        "greeting_title": greeting_title,  # Thêm cái này
+        "greeting_sub": greeting_sub,  # Thêm cái này
+        "daily_quote": daily_quote,  # CỰC KỲ QUAN TRỌNG: Thêm cái này
         "widget_template": widget_template,
         "today_food": today_food,
         "dishes_json": dishes_json,
@@ -193,23 +195,23 @@ def dashboard(request):
 
     return render(request, "core/dashboard.html", context)
 
+
 def tool_page(request):
     office_tools = [
-        {'name': 'Chuyển File', 'desc': 'PDF, Word, Excel...', 'icon': 'file-type-2'},
-        {'name': 'OCR Ảnh', 'desc': 'Lấy text từ hình ảnh', 'icon': 'scan-text'},
-        {'name': 'Nén Ảnh', 'desc': 'Giảm dung lượng nhanh', 'icon': 'image-minus'},
-        {'name': 'AI Assistant', 'desc': 'Chat với AI', 'icon': 'bot'},
-        {'name': 'Xóa Background', 'desc': 'Tách nền ảnh', 'icon': 'eraser'},
-        {'name': 'Tạo mã QR', 'desc': 'Tạo QR link, Wifi...', 'icon': 'qr-code'},
-        {'name': 'Ghi chú', 'desc': 'Note nhanh ý tưởng', 'icon': 'sticky-note'},
-        {'name': 'File Mẫu', 'desc': 'Hợp đồng, đơn từ...', 'icon': 'files'},
-        {'name': 'Download', 'desc': 'Bộ cài phần mềm', 'icon': 'download-cloud'},
-        {'name': 'Lương Net', 'desc': 'Tính Gross sang Net', 'icon': 'calculator'},
-        {'name': 'BHTN', 'desc': 'Bảo hiểm thất nghiệp', 'icon': 'landmark'},
-        {'name': 'Giờ Về', 'desc': 'Đếm ngược tan làm', 'icon': 'timer'},
+        {"name": "Chuyển File", "desc": "PDF, Word, Excel...", "icon": "file-type-2"},
+        {"name": "OCR Ảnh", "desc": "Lấy text từ hình ảnh", "icon": "scan-text"},
+        {"name": "Nén Ảnh", "desc": "Giảm dung lượng nhanh", "icon": "image-minus"},
+        {"name": "AI Assistant", "desc": "Chat với AI", "icon": "bot"},
+        {"name": "Xóa Background", "desc": "Tách nền ảnh", "icon": "eraser"},
+        {"name": "Tạo mã QR", "desc": "Tạo QR link, Wifi...", "icon": "qr-code"},
+        {"name": "Ghi chú", "desc": "Note nhanh ý tưởng", "icon": "sticky-note"},
+        {"name": "File Mẫu", "desc": "Hợp đồng, đơn từ...", "icon": "files"},
+        {"name": "Download", "desc": "Bộ cài phần mềm", "icon": "download-cloud"},
+        {"name": "Lương Net", "desc": "Tính Gross sang Net", "icon": "calculator"},
+        {"name": "BHTN", "desc": "Bảo hiểm thất nghiệp", "icon": "landmark"},
+        {"name": "Giờ Về", "desc": "Đếm ngược tan làm", "icon": "timer"},
     ]
-    return render(request, 'core/tool_page.html', {'all_tools': office_tools})
-
+    return render(request, "core/tool_page.html", {"all_tools": office_tools})
 
 
 def confession_feed(request):
@@ -408,6 +410,7 @@ def api_react_confession(request, post_id, reaction_type):
 
     return JsonResponse({"success": False}, status=400)
 
+
 @staff_member_required(login_url="login")
 def moderation_dashboard(request):
     """
@@ -428,7 +431,7 @@ def moderation_dashboard(request):
             post.status = "APPROVED"
             post.save()
             messages.success(request, f"✅ Đã duyệt bài #{post.id}")
-        
+
         elif action == "reject":
             post = get_object_or_404(Confession, id=request.POST.get("post_id"))
             post.status = "REJECTED"
@@ -444,14 +447,27 @@ def moderation_dashboard(request):
 
             if target_type == "ALL":
                 users = User.objects.all()
-                Notification.objects.bulk_create([
-                    Notification(user=u, title=title, content=content, notification_type=noti_type) for u in users
-                ])
+                Notification.objects.bulk_create(
+                    [
+                        Notification(
+                            user=u,
+                            title=title,
+                            content=content,
+                            notification_type=noti_type,
+                        )
+                        for u in users
+                    ]
+                )
                 messages.success(request, f"📢 Đã gửi đến {users.count()} user.")
             elif target_type == "SINGLE":
                 try:
                     user = User.objects.get(username=target_username)
-                    Notification.objects.create(user=user, title=title, content=content, notification_type=noti_type)
+                    Notification.objects.create(
+                        user=user,
+                        title=title,
+                        content=content,
+                        notification_type=noti_type,
+                    )
                     messages.success(request, f"📨 Đã gửi đến {target_username}.")
                 except User.DoesNotExist:
                     messages.error(request, "Không tìm thấy user.")
@@ -463,10 +479,10 @@ def moderation_dashboard(request):
             time_cat = request.POST.get("time_category")
             if content and time_cat:
                 DailyQuote.objects.create(
-                    content=content, 
-                    author=author, 
+                    content=content,
+                    author=author,
                     time_category=time_cat,
-                    is_active=True
+                    is_active=True,
                 )
                 messages.success(request, "✨ Đã thêm câu quote mới!")
             else:
@@ -490,13 +506,16 @@ def moderation_dashboard(request):
 
         # 1.3 NHÓM RELAX & PANTRY (Giữ nguyên logic của bạn nhưng sửa thụt lề)
         elif action == "update_health_config":
-            codes = ['yoga', 'wrist', 'meditation', 'music','back']
+            codes = ["yoga", "wrist", "meditation", "music", "back"]
             for code in codes:
                 new_id = request.POST.get(f"video_{code}")
                 if new_id is not None:
                     HealthExercise.objects.update_or_create(
                         code=code,
-                        defaults={'title': code.capitalize(), 'youtube_id': new_id.strip()}
+                        defaults={
+                            "title": code.capitalize(),
+                            "youtube_id": new_id.strip(),
+                        },
                     )
             messages.success(request, "✅ Đã cập nhật cấu hình Relax!")
             return redirect(f"{request.path}?tab=relax")
@@ -511,7 +530,7 @@ def moderation_dashboard(request):
                     url_foody=request.POST.get("res_url"),
                     image=request.FILES.get("res_image"),
                     category=request.POST.get("res_category", "Món ngon"),
-                    rating=5.0
+                    rating=5.0,
                 )
                 messages.success(request, f"Đã thêm quán '{name}' thành công!")
             except Exception as e:
@@ -531,13 +550,23 @@ def moderation_dashboard(request):
 
     if current_tab == "confession":
         if current_filter == "approved":
-            post_list = Confession.objects.filter(status="APPROVED").prefetch_related("comments__author").order_by("-created_at")
+            post_list = (
+                Confession.objects.filter(status="APPROVED")
+                .prefetch_related("comments__author")
+                .order_by("-created_at")
+            )
             paginator = Paginator(post_list, 20)
             posts = paginator.get_page(request.GET.get("page"))
         elif current_filter == "reports":
-            reports = PostReport.objects.filter(is_resolved=False).select_related("post", "user").order_by("-created_at")
+            reports = (
+                PostReport.objects.filter(is_resolved=False)
+                .select_related("post", "user")
+                .order_by("-created_at")
+            )
         else:
-            post_list = Confession.objects.filter(status="PENDING").order_by("created_at")
+            post_list = Confession.objects.filter(status="PENDING").order_by(
+                "created_at"
+            )
             paginator = Paginator(post_list, 50)
             posts = paginator.get_page(request.GET.get("page"))
 
@@ -547,7 +576,7 @@ def moderation_dashboard(request):
 
     elif current_tab == "pantry":
         pantry_restaurants = Restaurant.objects.all().order_by("-id")
-        
+
     elif current_tab == "quote":
         all_quotes = DailyQuote.objects.all().order_by("-id")
 
@@ -569,6 +598,7 @@ def moderation_dashboard(request):
     }
 
     return render(request, "core/moderation.html", context)
+
 
 @login_required
 def my_profile(request):
@@ -810,21 +840,22 @@ def lunch_page(request):
     }
     return render(request, "core/lunch.html", context)
 
+
 def health_page(request):
     # 1. Lấy danh sách bài tập từ DB
     exercises_db = HealthExercise.objects.all()
-    
+
     # Chuyển thành Dictionary để dễ dùng: {'yoga': <Object>, 'wrist': <Object>...}
     exercises = {ex.code: ex for ex in exercises_db}
 
     # 2. Dữ liệu mặc định (Nếu DB chưa có bài đó)
     default_data = {
-        'yoga': 's-7lyvblFNI',
-        'wrist': 'QZjkZa4NxNg',
-        'meditation': 'O-6f5wQXSu8',
-        'music': 'jfKfPfyJRdk'
+        "yoga": "s-7lyvblFNI",
+        "wrist": "QZjkZa4NxNg",
+        "meditation": "O-6f5wQXSu8",
+        "music": "jfKfPfyJRdk",
     }
-    
+
     # 3. Danh sách câu nói truyền cảm hứng
     quotes = [
         "Hít vào tâm tĩnh lặng, thở ra miệng mỉm cười.",
@@ -832,39 +863,45 @@ def health_page(request):
         "Đừng gồng nữa, cột sống của bạn đang khóc đấy!",
         "Chỉ mất 5 phút để sạc lại năng lượng cho 2 giờ làm việc tiếp theo.",
     ]
-    
+
     context = {
         "quote": random.choice(quotes),
-        "exercises": exercises, 
-        "defaults": default_data
+        "exercises": exercises,
+        "defaults": default_data,
     }
     return render(request, "core/health_page.html", context)
+
 
 @login_required
 def shop_page(request):
     # 1. Lấy danh sách sản phẩm (Có thể phân loại theo danh mục)
-    products = Product.objects.filter(is_active=True).order_by('-created_at')
-    
+    products = Product.objects.filter(is_active=True).order_by("-created_at")
+
     # 2. Xử lý logic Đổi quà bằng điểm KPI
     if request.method == "POST" and "redeem_product" in request.POST:
         product_id = request.POST.get("product_id")
         product = get_object_or_404(Product, id=product_id)
         user_profile = request.user.profile
-        
+
         # Kiểm tra xem đủ điểm không
         if user_profile.total_kpi_points >= product.price:
             # Trừ điểm và tạo lịch sử (PointHistory)
             user_profile.total_kpi_points -= product.price
             user_profile.save()
-            
+
             # Gửi thông báo cho Admin hoặc User
-            messages.success(request, f"Chúc mừng! Bạn đã đổi thành công {product.name}. Admin sẽ liên hệ giao quà nhé!")
-            return redirect('shop_page')
+            messages.success(
+                request,
+                f"Chúc mừng! Bạn đã đổi thành công {product.name}. Admin sẽ liên hệ giao quà nhé!",
+            )
+            return redirect("shop_page")
         else:
-            messages.error(request, "Rất tiếc! Bạn chưa đủ điểm KPI để đổi món quà này.")
+            messages.error(
+                request, "Rất tiếc! Bạn chưa đủ điểm KPI để đổi món quà này."
+            )
 
     context = {
-        'products': products,
-        'categories': ['Cây xanh', 'Đèn bàn', 'Phụ kiện', 'Tượng/Mô hình'],
+        "products": products,
+        "categories": ["Cây xanh", "Đèn bàn", "Phụ kiện", "Tượng/Mô hình"],
     }
-    return render(request, 'core/shop_page.html', context)
+    return render(request, "core/shop_page.html", context)
