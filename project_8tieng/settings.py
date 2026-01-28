@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-zcbui4&aljm^8aipo&uc&rgb3*l(c2*_)i((-4g*g9)+^^7627
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*','trieuvuong1997.pythonanywhere.com','127.0.0.1']
 
 
 # Application definition
@@ -74,16 +74,30 @@ WSGI_APPLICATION = 'project_8tieng.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+if '/home/trieuvuong1997' in str(BASE_DIR):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'trieuvuong1997$project_8tieng_db',
+            'USER': 'trieuvuong1997',
+            'PASSWORD': '123123sS',  # Password trên Server
+            'HOST': 'trieuvuong1997.mysql.pythonanywhere-services.com',
+            'PORT': '3306',
+        }
+    }
+# 2. Ngược lại (không tìm thấy đường dẫn trên) -> Dùng Database Local
+else:
+    DATABASES = {
+        'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'project_8tieng_db',      # Tên DB bạn vừa tạo ở máy tính
             'USER': 'root',            # User mặc định của XAMPP/Local
             'PASSWORD': '123123',            # Pass mặc định (thường để trống)
             'HOST': '127.0.0.1',       # Localhost
             'PORT': '3306',
+        }
     }
-}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

@@ -9,12 +9,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         
-        /* Animation Fade In Down */
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -23,23 +20,30 @@
             animation: fadeInDown 0.2s ease-out forwards;
         }
 
-        /* Scrollbar đẹp hơn */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        /* Tinh chỉnh cho Mobile Menu trượt xuống */
+        #mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+        #mobile-menu.open {
+            max-height: 400px; /* Độ cao tối đa khi mở */
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-   <nav class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100/80 backdrop-blur-md bg-white/90">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <nav class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100/80 backdrop-blur-md bg-white/90">
+        <div class="max-w-7xl mx-auto px-4 py-2.5 sm:py-3 flex justify-between items-center">
             
-            <div class="flex items-center gap-8">
-                <a href="{% url 'home' %}" class="flex items-center gap-2.5 group">
-                    <img src="{% static 'img/logo.png' %}" alt="8Tieng Logo" class="w-9 h-9 object-contain group-hover:scale-110 transition duration-300">
-                    
-                    <span class="hidden sm:inline font-bold text-xl text-gray-800 group-hover:text-indigo-600 transition">
+            <div class="flex items-center gap-4 lg:gap-8">
+                <button id="mobile-menu-button" class="md:hidden p-1.5 rounded-lg hover:bg-gray-100 text-gray-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+
+                <a href="{% url 'home' %}" class="flex items-center gap-2 group">
+                    <img src="{% static 'img/logo.png' %}" alt="8Tieng Logo" class="w-8 h-8 sm:w-9 sm:h-9 object-contain group-hover:scale-110 transition duration-300">
+                    <span class="font-bold text-lg sm:text-xl text-gray-800 group-hover:text-indigo-600 transition">
                         8Tieng<span class="text-indigo-600">.vn</span>
                     </span>
                 </a>
@@ -48,117 +52,113 @@
                     <a href="{% url 'home' %}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition flex items-center gap-2">
                         <i data-lucide="home" class="w-4 h-4"></i> Trang chủ
                     </a>
-                    
                     <a href="{% url 'tool_page' %}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-blue-600 transition flex items-center gap-2">
                         <i data-lucide="briefcase" class="w-4 h-4"></i> Công cụ
                     </a>
-
                     <a href="{% url 'lunch_page' %}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-orange-600 transition flex items-center gap-2">
                         <i data-lucide="coffee" class="w-4 h-4"></i> Pantry
                     </a>
-
                     <a href="{% url 'confession_feed' %}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-purple-600 transition flex items-center gap-2">
                         <i data-lucide="message-circle" class="w-4 h-4"></i> Cộng đồng
                     </a>
-
                     <a href="{% url 'shop_page' %}" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-pink-600 transition flex items-center gap-2">
                         <i data-lucide="shopping-bag" class="w-4 h-4"></i> Shop
                     </a>
                 </div>
             </div>
             
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 sm:gap-4">
                 {% if user.is_authenticated %}
-                    <div class="hidden lg:flex items-center gap-2 bg-indigo-50 px-3 py-1.5 rounded-full text-sm font-semibold text-indigo-700 border border-indigo-100 cursor-default shadow-sm">
-                        <i data-lucide="award" class="w-4 h-4 text-yellow-500 fill-current"></i>
+                    <div class="flex items-center gap-1.5 bg-indigo-50 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold text-indigo-700 border border-indigo-100 cursor-default shadow-sm">
+                        <i data-lucide="award" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-500 fill-current"></i>
                         <span>{{ user.profile.total_kpi_points|default:"0" }}</span>
                     </div>
 
-                    <div id="user-menu-wrapper" class="relative py-2 group"> 
-                        <a href="{% url 'my_profile' %}" class="flex items-center gap-2 cursor-pointer">
-                            <div class="w-9 h-9 rounded-full bg-gray-200 overflow-hidden border border-gray-300 hover:ring-2 hover:ring-indigo-300 transition shadow-sm">
-                                {% if user.profile.avatar %}
-                                    <img src="{{ user.profile.avatar.url }}" class="w-full h-full object-cover">
-                                {% else %}
-                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ user.username }}" class="w-full h-full">
-                                {% endif %}
-                            </div>
-                        </a>
+                    <div id="user-menu-wrapper" class="relative py-1 group"> 
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gray-200 overflow-hidden border border-gray-300 hover:ring-2 hover:ring-indigo-300 transition shadow-sm cursor-pointer">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" class="w-full h-full object-cover">
+                            {% else %}
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ user.username }}" class="w-full h-full">
+                            {% endif %}
+                        </div>
                         
-                        <div id="user-menu-dropdown" class="absolute right-0 mt-1 w-64 bg-white rounded-xl shadow-xl border border-gray-100 hidden p-2 z-50 origin-top-right animate-fade-in-down">
-                            <div class="absolute -top-1.5 right-3 w-3 h-3 bg-white transform rotate-45 border-t border-l border-gray-100"></div>
-
-                            <div class="relative z-10 bg-white rounded-xl">
-                                <div class="px-4 py-3 border-b border-gray-50 mb-1 bg-gray-50 rounded-t-lg">
-                                    <p class="text-xs text-gray-500 uppercase font-bold mb-0.5">Tài khoản</p>
-                                    <p class="text-sm font-bold text-gray-800 truncate">{{ user.username }}</p>
-                                    {% if user.profile.job_title %}
-                                        <p class="text-xs text-indigo-600 truncate">{{ user.profile.job_title }}</p>
-                                    {% endif %}
-                                </div>
-                                
-                                <a href="{% url 'my_profile' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition font-medium">
-                                    <i data-lucide="user" class="w-4 h-4"></i> Hồ sơ cá nhân
-                                </a>
-                                
-                                {% if user.is_staff %}
-                                    <a href="{% url 'moderation_dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-yellow-600 font-bold hover:bg-yellow-50 rounded-lg transition">
-                                        <i data-lucide="shield-alert" class="w-4 h-4"></i> Trang quản trị
-                                    </a>
-                                {% endif %}
-                                
-                                <div class="border-t border-gray-100 my-1"></div>
-
-                                <form action="{% url 'logout' %}" method="post">
-                                    {% csrf_token %}
-                                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition font-medium">
-                                        <i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất
-                                    </button>
-                                </form>
+                        <div id="user-menu-dropdown" class="absolute right-0 mt-2 w-56 sm:w-64 bg-white rounded-xl shadow-xl border border-gray-100 hidden p-2 z-50 origin-top-right animate-fade-in-down">
+                            <div class="px-4 py-3 border-b border-gray-50 mb-1 bg-gray-50 rounded-t-lg">
+                                <p class="text-[10px] text-gray-500 uppercase font-bold mb-0.5">Tài khoản</p>
+                                <p class="text-sm font-bold text-gray-800 truncate">{{ user.username }}</p>
                             </div>
+                            
+                            <a href="{% url 'my_profile' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition font-medium">
+                                <i data-lucide="user" class="w-4 h-4"></i> Hồ sơ cá nhân
+                            </a>
+                            
+                            {% if user.is_staff %}
+                                <a href="{% url 'moderation_dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-yellow-600 font-bold hover:bg-yellow-50 rounded-lg transition">
+                                    <i data-lucide="shield-alert" class="w-4 h-4"></i> Trang quản trị
+                                </a>
+                            {% endif %}
+                            
+                            <div class="border-t border-gray-100 my-1"></div>
+
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition font-medium text-left">
+                                    <i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất
+                                </button>
+                            </form>
                         </div>
                     </div>
 
                 {% else %}
-                    <a href="{% url 'login' %}" class="text-gray-600 font-medium text-sm hover:text-indigo-600 transition px-3 py-2 rounded-lg hover:bg-gray-100">
-                        Đăng nhập
-                    </a>
-                    <a href="{% url 'register' %}" class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md hover:bg-indigo-700 transition transform active:scale-95 flex items-center gap-2">
-                        <span>Đăng ký</span>
-                    </a>
+                    <a href="{% url 'login' %}" class="text-gray-600 font-medium text-xs sm:text-sm hover:text-indigo-600 transition px-2 sm:px-3">Đăng nhập</a>
+                    <a href="{% url 'register' %}" class="bg-indigo-600 text-white px-3 py-1.5 sm:px-5 sm:py-2 rounded-lg text-xs sm:text-sm font-bold shadow-md hover:bg-indigo-700 transition">Đăng ký</a>
                 {% endif %}
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-50 px-4">
+            <div class="py-3 flex flex-col gap-1">
+                <a href="{% url 'home' %}" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
+                    <i data-lucide="home" class="w-5 h-5"></i> <span class="font-medium">Trang chủ</span>
+                </a>
+                <a href="{% url 'tool_page' %}" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition">
+                    <i data-lucide="briefcase" class="w-5 h-5"></i> <span class="font-medium">Công cụ</span>
+                </a>
+                <a href="{% url 'lunch_page' %}" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition">
+                    <i data-lucide="coffee" class="w-5 h-5"></i> <span class="font-medium">Pantry</span>
+                </a>
+                <a href="{% url 'confession_feed' %}" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i> <span class="font-medium">Cộng đồng</span>
+                </a>
+                <a href="{% url 'shop_page' %}" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i> <span class="font-medium">Shop</span>
+                </a>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 mt-6 w-full flex-grow">
-        
+    <main class="max-w-7xl mx-auto px-4 mt-4 sm:mt-6 w-full flex-grow">
         {% if messages %}
             <div class="mb-6 flex flex-col gap-2">
-            {% for message in messages %}
-                <div class="p-4 rounded-xl shadow-sm border text-sm font-medium flex items-center gap-3 animate-fade-in-down
-                    {% if message.tags == 'error' %} bg-red-50 text-red-700 border-red-200 
-                    {% elif message.tags == 'success' %} bg-green-50 text-green-700 border-green-200 
-                    {% elif message.tags == 'warning' %} bg-yellow-50 text-yellow-700 border-yellow-200 
-                    {% else %} bg-blue-50 text-blue-700 border-blue-200 {% endif %}">
-                    
-                    {% if message.tags == 'error' %} <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                    {% elif message.tags == 'success' %} <i data-lucide="check-circle" class="w-5 h-5"></i>
-                    {% elif message.tags == 'warning' %} <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-                    {% else %} <i data-lucide="info" class="w-5 h-5"></i> {% endif %}
-                    
-                    <span>{{ message }}</span>
-                    
-                    <button onclick="this.parentElement.remove()" class="ml-auto hover:bg-black/5 p-1 rounded-full transition">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            {% endfor %}
+                {% for message in messages %}
+                    <div class="p-3 sm:p-4 rounded-xl shadow-sm border text-xs sm:text-sm font-medium flex items-center gap-3 animate-fade-in-down
+                        {% if message.tags == 'error' %} bg-red-50 text-red-700 border-red-200 
+                        {% elif message.tags == 'success' %} bg-green-50 text-green-700 border-green-200 
+                        {% else %} bg-blue-50 text-blue-700 border-blue-200 {% endif %}">
+                        
+                        <i data-lucide="info" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                        <span>{{ message }}</span>
+                        
+                        <button onclick="this.parentElement.remove()" class="ml-auto hover:bg-black/5 p-1 rounded-full transition">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                {% endfor %}
             </div>
         {% endif %}
 
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 
     {% include 'includes/footer.html' %}
@@ -166,22 +166,34 @@
     <script>
         lucide.createIcons();
 
+        // Xử lý Mobile Menu & User Dropdown
         document.addEventListener('DOMContentLoaded', function() {
-            const wrapper = document.getElementById('user-menu-wrapper');
-            const dropdown = document.getElementById('user-menu-dropdown');
-            let timeoutId;
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const userWrapper = document.getElementById('user-menu-wrapper');
+            const userDropdown = document.getElementById('user-menu-dropdown');
 
-            if (wrapper && dropdown) {
-                wrapper.addEventListener('mouseenter', () => {
-                    clearTimeout(timeoutId);
-                    dropdown.classList.remove('hidden');
-                });
-                wrapper.addEventListener('mouseleave', () => {
-                    timeoutId = setTimeout(() => {
-                        dropdown.classList.add('hidden');
-                    }, 300);
+            // Toggle Mobile Menu
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    mobileMenu.classList.toggle('open');
                 });
             }
+
+            // Toggle User Dropdown (Click thay vì Hover để hỗ trợ Mobile)
+            if (userWrapper && userDropdown) {
+                userWrapper.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('hidden');
+                });
+            }
+
+            // Đóng menu khi nhấn ra ngoài
+            document.addEventListener('click', () => {
+                if (mobileMenu) mobileMenu.classList.remove('open');
+                if (userDropdown) userDropdown.classList.add('hidden');
+            });
         });
     </script>
 </body>

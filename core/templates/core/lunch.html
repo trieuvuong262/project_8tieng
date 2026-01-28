@@ -2,90 +2,92 @@
 {% load static %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto pb-20 animate-fade-in-down px-4">
+<div class="max-w-6xl mx-auto pb-20 animate-fade-in-down px-3 md:px-4">
 
     <div class="mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div>
-            <a href="{% url 'home' %}" class="text-gray-500 hover:text-indigo-600 text-sm font-bold flex items-center gap-1 mb-2">
+        <div class="w-full md:w-auto text-center md:text-left">
+            <a href="{% url 'home' %}" class="text-gray-500 hover:text-indigo-600 text-sm font-bold flex items-center justify-center md:justify-start gap-1 mb-2">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i> Quay lại Trang chủ
             </a>
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-3">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center justify-center md:justify-start gap-3">
                 <span class="bg-orange-100 text-orange-600 p-2 rounded-xl"><i data-lucide="utensils" class="w-6 h-6 md:w-8 md:h-8"></i></span>
                 Hôm nay ăn gì?
             </h1>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-        <div class="lg:col-span-5 space-y-6">
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 mb-16">
+        
+        <div class="lg:col-span-5 space-y-4 md:space-y-6">
+            
+            <div class="bg-white p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-20 h-20 bg-orange-50 rounded-bl-full -mr-4 -mt-4"></div>
                 <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <i data-lucide="shuffle" class="w-5 h-5 text-orange-500"></i> Tạo Menu Ngẫu Nhiên
                 </h3>
-                <div class="flex gap-3">
+                <div class="flex gap-3 flex-col sm:flex-row">
                     <div class="relative flex-1">
                         <input type="number" id="random-count" min="1" max="100" value="10" class="w-full pl-3 pr-10 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 font-bold text-gray-700" placeholder="Số lượng">
                         <span class="absolute right-3 top-3.5 text-xs text-gray-400 font-bold">MÓN</span>
                     </div>
-                    <button onclick="fillRandomMenu()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-4 py-3 rounded-xl transition shadow-lg shadow-orange-200 flex items-center gap-2">
-                        <i data-lucide="wand-2" class="w-5 h-5"></i> Lấy món
+                    <button onclick="fillRandomMenu()" class="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white font-bold px-4 py-3 rounded-xl transition shadow-lg shadow-orange-200 flex items-center justify-center gap-2">
+                        <i data-lucide="wand-2" class="w-5 h-5"></i> <span class="whitespace-nowrap">Lấy món</span>
                     </button>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 h-[400px] flex flex-col">
+            <div class="bg-white p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 h-[320px] md:h-[400px] flex flex-col">
                 <div class="flex justify-between items-center mb-2">
                     <label class="font-bold text-gray-800 text-sm">Danh sách quay:</label>
                     <span id="item-count" class="bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded font-bold">0 món</span>
                 </div>
-                <textarea id="menu-input" class="flex-1 w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm font-medium text-gray-700 focus:ring-2 focus:ring-indigo-100 transition resize-none leading-loose" placeholder="Nhập món ăn..."></textarea>
+                <textarea id="menu-input" class="flex-1 w-full bg-gray-50 border border-gray-200 rounded-xl p-3 md:p-4 text-sm font-medium text-gray-700 focus:ring-2 focus:ring-indigo-100 transition resize-none leading-loose" placeholder="Nhập món ăn... (xuống dòng để thêm món mới)"></textarea>
                 <div class="flex justify-between items-center mt-3">
-                    <button onclick="clearMenu()" class="text-xs text-red-500 font-bold hover:underline">Xóa hết</button>
-                    <button onclick="updateWheelData()" class="text-xs bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg font-bold hover:bg-indigo-100 transition">Cập nhật &rarr;</button>
+                    <button onclick="clearMenu()" class="text-xs text-red-500 font-bold hover:underline p-2">Xóa hết</button>
+                    <button onclick="updateWheelData()" class="text-xs bg-indigo-50 text-indigo-600 px-4 py-2 rounded-lg font-bold hover:bg-indigo-100 transition">Cập nhật &rarr;</button>
                 </div>
             </div>
         </div>
 
         <div class="lg:col-span-7">
-            <div class="bg-gradient-to-br from-indigo-950 via-purple-900 to-indigo-900 rounded-[3rem] p-8 text-center text-white relative overflow-hidden shadow-2xl h-full flex flex-col justify-center items-center border-4 border-indigo-800/50">
+            <div class="bg-gradient-to-br from-indigo-950 via-purple-900 to-indigo-900 rounded-[2rem] md:rounded-[3rem] p-4 md:p-8 text-center text-white relative overflow-hidden shadow-2xl h-full flex flex-col justify-center items-center border-4 border-indigo-800/50">
                 <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-soft-light"></div>
                 
-                <div id="result-box" class="hidden mb-8 animate-bounce-in relative z-30">
-                    <div class="bg-white text-gray-900 px-10 py-6 rounded-3xl shadow-lg border-4 border-yellow-400">
-                        <h2 id="final-result" class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 leading-tight">???</h2>
+                <div id="result-box" class="hidden mb-6 md:mb-8 animate-bounce-in relative z-30 w-full max-w-sm md:max-w-none">
+                    <div class="bg-white text-gray-900 px-4 py-4 md:px-10 md:py-6 rounded-2xl md:rounded-3xl shadow-lg border-4 border-yellow-400 mx-auto">
+                        <h2 id="final-result" class="text-2xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 leading-tight break-words">???</h2>
                     </div>
                 </div>
 
-                <div class="relative w-[300px] h-[300px] md:w-[420px] md:h-[420px] mb-10 group z-10">
-                    <div class="absolute -top-7 left-1/2 -translate-x-1/2 z-30 filter drop-shadow-lg">
-                         <div class="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[40px] border-t-yellow-500"></div>
+                <div class="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] md:w-[420px] md:h-[420px] mb-8 md:mb-10 group z-10 transition-all duration-300">
+                    <div class="absolute -top-5 md:-top-7 left-1/2 -translate-x-1/2 z-30 filter drop-shadow-lg">
+                         <div class="w-0 h-0 border-l-[15px] md:border-l-[20px] border-l-transparent border-r-[15px] md:border-r-[20px] border-r-transparent border-t-[30px] md:border-t-[40px] border-t-yellow-500"></div>
                     </div>
-                    <div class="absolute inset-0 rounded-full bg-gradient-to-b from-yellow-300 to-yellow-600 border-[12px] border-yellow-500 overflow-hidden"></div>
-                    <div id="wheel-circle" class="absolute top-3 left-3 right-3 bottom-3 rounded-full overflow-hidden transition-transform duration-[5000ms] cubic-bezier(0.15, 0, 0.15, 1) border-4 border-white/10"></div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-500 to-orange-500 flex items-center justify-center z-20 border-4 border-yellow-200/50">
-                        <div class="bg-white/90 p-3 rounded-full shadow-inner"><i data-lucide="utensils-crossed" class="w-8 h-8 text-orange-600"></i></div>
+                    <div class="absolute inset-0 rounded-full bg-gradient-to-b from-yellow-300 to-yellow-600 border-[8px] md:border-[12px] border-yellow-500 overflow-hidden"></div>
+                    <div id="wheel-circle" class="absolute top-2 left-2 right-2 bottom-2 md:top-3 md:left-3 md:right-3 md:bottom-3 rounded-full overflow-hidden transition-transform duration-[5000ms] cubic-bezier(0.15, 0, 0.15, 1) border-4 border-white/10"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-500 to-orange-500 flex items-center justify-center z-20 border-4 border-yellow-200/50">
+                        <div class="bg-white/90 p-2 md:p-3 rounded-full shadow-inner"><i data-lucide="utensils-crossed" class="w-5 h-5 md:w-8 md:h-8 text-orange-600"></i></div>
                     </div>
                 </div>
 
-                <button id="btn-spin" onclick="startSpin()" class="relative z-20 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 text-yellow-950 font-black text-xl px-14 py-5 rounded-full shadow-lg hover:-translate-y-1 transition-all flex items-center gap-3 border-b-4 border-orange-700 active:border-b-0">
-                    <span>QUAY NGAY</span> <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                <button id="btn-spin" onclick="startSpin()" class="relative z-20 w-full sm:w-auto bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 text-yellow-950 font-black text-lg md:text-xl px-6 py-4 md:px-14 md:py-5 rounded-xl md:rounded-full shadow-lg hover:-translate-y-1 transition-all flex items-center justify-center gap-3 border-b-4 border-orange-700 active:border-b-0">
+                    <span>QUAY NGAY</span> <i data-lucide="play" class="w-5 h-5 md:w-6 md:h-6 fill-current"></i>
                 </button>
             </div>
         </div>
     </div>
 
     {% if db_restaurants %}
-    <div id="partner-section" class="border-t border-gray-100 pt-10 mb-12 scroll-mt-24">
-        <div class="flex items-center gap-3 mb-6">
-            <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+    <div id="partner-section" class="border-t border-gray-100 pt-8 md:pt-10 mb-12 scroll-mt-20 md:scroll-mt-24">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-2">
                 <span class="bg-yellow-100 text-yellow-600 p-2 rounded-lg"><i data-lucide="crown" class="w-5 h-5"></i></span>
                 Quán Nổi Bật
             </h2>
             <span class="text-[10px] font-bold bg-gradient-to-r from-red-500 to-orange-500 text-white px-2 py-1 rounded uppercase tracking-wider shadow-sm">Được đề xuất</span>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {% for res in db_restaurants %}
             <a href="{{ res.url_foody|default:'#' }}" target="_blank" class="group bg-white border-2 border-orange-100 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block relative ring-4 ring-transparent hover:ring-orange-50">
                 <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
@@ -100,7 +102,7 @@
                     <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm flex items-center gap-1"><i data-lucide="award" class="w-3 h-3"></i> Partner</div>
                 </div>
                 <div class="p-4 bg-gradient-to-b from-white to-orange-50/30">
-                    <h4 class="font-bold text-gray-800 text-lg truncate group-hover:text-orange-600 transition" title="{{ res.name }}">{{ res.name }}</h4>
+                    <h4 class="font-bold text-gray-800 text-base md:text-lg truncate group-hover:text-orange-600 transition" title="{{ res.name }}">{{ res.name }}</h4>
                     <p class="text-sm text-gray-500 truncate mt-1 flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3 flex-shrink-0 text-orange-400"></i> {{ res.address }}</p>
                     <div class="border-t border-orange-100 mt-3 pt-3 flex justify-between items-center text-xs">
                         <span class="text-orange-600 flex items-center gap-1 font-bold bg-orange-100 px-2 py-1 rounded"><i data-lucide="thumbs-up" class="w-3 h-3"></i> Uy tín</span>
@@ -114,41 +116,41 @@
         {% if db_restaurants.has_other_pages %}
         <div class="flex justify-center gap-2 mt-6">
             {% if db_restaurants.has_previous %}
-                <a href="?{{ base_params }}&page_db={{ db_restaurants.previous_page_number }}&page_api={{ api_restaurants.number }}#partner-section" class="px-3 py-1 bg-white border rounded-lg hover:bg-orange-50 text-gray-600 font-bold text-sm shadow-sm transition">← Trước</a>
+                <a href="?{{ base_params }}&page_db={{ db_restaurants.previous_page_number }}&page_api={{ api_restaurants.number }}#partner-section" class="px-3 py-2 bg-white border rounded-lg hover:bg-orange-50 text-gray-600 font-bold text-sm shadow-sm transition">← Trước</a>
             {% endif %}
             
-            <span class="px-3 py-1 bg-orange-100 text-orange-600 rounded-lg font-bold text-sm shadow-inner">Trang {{ db_restaurants.number }}</span>
+            <span class="px-3 py-2 bg-orange-100 text-orange-600 rounded-lg font-bold text-sm shadow-inner">Trang {{ db_restaurants.number }}</span>
 
             {% if db_restaurants.has_next %}
-                <a href="?{{ base_params }}&page_db={{ db_restaurants.next_page_number }}&page_api={{ api_restaurants.number }}#partner-section" class="px-3 py-1 bg-white border rounded-lg hover:bg-orange-50 text-gray-600 font-bold text-sm shadow-sm transition">Sau →</a>
+                <a href="?{{ base_params }}&page_db={{ db_restaurants.next_page_number }}&page_api={{ api_restaurants.number }}#partner-section" class="px-3 py-2 bg-white border rounded-lg hover:bg-orange-50 text-gray-600 font-bold text-sm shadow-sm transition">Sau →</a>
             {% endif %}
         </div>
         {% endif %}
     </div>
     {% endif %}
 
-    <div id="nearby-section" class="border-t border-gray-100 pt-10 scroll-mt-24">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-            <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+    <div id="nearby-section" class="border-t border-gray-100 pt-8 md:pt-10 scroll-mt-20 md:scroll-mt-24">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 md:mb-8">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-2">
                 <span class="bg-blue-100 text-blue-600 p-2 rounded-lg"><i data-lucide="radar" class="w-5 h-5"></i></span>
                 Quán ngon gần đây
             </h2>
 
-            <div class="bg-gray-50 p-3 rounded-2xl flex items-center gap-4 border border-gray-200 shadow-sm">
-                <div class="flex items-center gap-2 text-sm text-gray-600 font-bold whitespace-nowrap">
-                    <i data-lucide="radius" class="w-4 h-4 text-indigo-500"></i>
-                    Bán kính: <span id="radius-display" class="text-indigo-600">{{ current_radius }}m</span>
+            <div class="bg-gray-50 p-3 rounded-2xl flex flex-col sm:flex-row items-center gap-3 sm:gap-4 border border-gray-200 shadow-sm w-full lg:w-auto">
+                <div class="flex items-center gap-2 text-sm text-gray-600 font-bold whitespace-nowrap w-full sm:w-auto justify-between sm:justify-start">
+                    <span class="flex items-center gap-2"><i data-lucide="radius" class="w-4 h-4 text-indigo-500"></i> Bán kính:</span>
+                    <span id="radius-display" class="text-indigo-600">{{ current_radius }}m</span>
                 </div>
                 <input type="range" id="radius-slider" min="500" max="5000" step="100" value="{{ current_radius }}" 
-                    class="w-32 md:w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                    class="w-full sm:w-32 md:w-48 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                     oninput="updateRadiusLabel(this.value)">
-                <button onclick="applyFilter()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition shadow-md">
+                <button onclick="applyFilter()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-md">
                     Tìm kiếm
                 </button>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {% for res in api_restaurants %}
             <a href="{{ res.url_foody|default:'#' }}" target="_blank" class="group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 block relative">
                 <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
@@ -177,13 +179,13 @@
         {% if api_restaurants.has_other_pages %}
         <div class="flex justify-center gap-2 mt-6 pb-10">
             {% if api_restaurants.has_previous %}
-                <a href="?{{ base_params }}&page_api={{ api_restaurants.previous_page_number }}&page_db={{ db_restaurants.number }}#nearby-section" class="px-3 py-1 bg-white border rounded-lg hover:bg-blue-50 text-gray-600 font-bold text-sm shadow-sm transition">← Trước</a>
+                <a href="?{{ base_params }}&page_api={{ api_restaurants.previous_page_number }}&page_db={{ db_restaurants.number }}#nearby-section" class="px-3 py-2 bg-white border rounded-lg hover:bg-blue-50 text-gray-600 font-bold text-sm shadow-sm transition">← Trước</a>
             {% endif %}
             
-            <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-lg font-bold text-sm shadow-inner">Trang {{ api_restaurants.number }}</span>
+            <span class="px-3 py-2 bg-blue-100 text-blue-600 rounded-lg font-bold text-sm shadow-inner">Trang {{ api_restaurants.number }}</span>
 
             {% if api_restaurants.has_next %}
-                <a href="?{{ base_params }}&page_api={{ api_restaurants.next_page_number }}&page_db={{ db_restaurants.number }}#nearby-section" class="px-3 py-1 bg-white border rounded-lg hover:bg-blue-50 text-gray-600 font-bold text-sm shadow-sm transition">Sau →</a>
+                <a href="?{{ base_params }}&page_api={{ api_restaurants.next_page_number }}&page_db={{ db_restaurants.number }}#nearby-section" class="px-3 py-2 bg-white border rounded-lg hover:bg-blue-50 text-gray-600 font-bold text-sm shadow-sm transition">Sau →</a>
             {% endif %}
         </div>
         {% endif %}
@@ -269,6 +271,7 @@
             wheelCircle.appendChild(divider);
             
             const textEl = document.createElement('div');
+            // Mobile: text-[10px], Desktop: text-xs
             textEl.className = 'absolute top-1/2 left-1/2 text-white font-black text-[10px] md:text-xs uppercase origin-[0%_0%] whitespace-nowrap pt-1 pl-5 z-20 drop-shadow-sm';
             textEl.style.transform = `rotate(${rotate + sliceAngle/2 - 90}deg) translate(24px, -50%)`;
             textEl.style.width = '42%';

@@ -1,85 +1,81 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto pb-20 relative">
+<div class="max-w-7xl mx-auto pb-20 relative px-3 md:px-6">
 
-    <div
-        class="bg-indigo-900 text-white p-6 rounded-2xl shadow-lg mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div>
-            <h1 class="text-2xl font-bold flex items-center gap-2">
-                <i data-lucide="shield-alert" class="w-8 h-8 text-yellow-400"></i>
+    <div class="bg-indigo-900 text-white p-4 md:p-6 rounded-2xl shadow-lg mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="text-center md:text-left">
+            <h1 class="text-xl md:text-2xl font-bold flex items-center justify-center md:justify-start gap-2">
+                <i data-lucide="shield-alert" class="w-6 h-6 md:w-8 md:h-8 text-yellow-400"></i>
                 Trung tâm Kiểm duyệt
             </h1>
-            <p class="text-indigo-200 text-sm">Công cụ quản trị hệ thống.</p>
+            <p class="text-indigo-200 text-xs md:text-sm mt-1">Công cụ quản trị hệ thống.</p>
         </div>
     </div>
 
-    <div class="flex gap-2 mb-6 overflow-x-auto pb-2 custom-scrollbar">
+    <div class="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar -mx-3 px-3 md:mx-0 md:px-0">
         <a href="?tab=confession"
-            class="px-6 py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap
+            class="px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap text-sm md:text-base flex-shrink-0
             {% if current_tab == 'confession' %} bg-indigo-600 text-white shadow-lg shadow-indigo-200 transform scale-105 {% else %} bg-white text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 {% endif %}">
-            <i data-lucide="message-circle" class="w-5 h-5"></i> Confession
+            <i data-lucide="message-circle" class="w-4 h-4 md:w-5 md:h-5"></i> Confession
             {% if stats.pending > 0 or stats.reports > 0 %}
-            <span class="ml-1 px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded-full">{{
-                stats.pending|add:stats.reports }}</span>
+            <span class="ml-1 px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded-full">{{ stats.pending|add:stats.reports }}</span>
             {% endif %}
         </a>
 
         <a href="?tab=relax"
-            class="px-6 py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap
+            class="px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap text-sm md:text-base flex-shrink-0
             {% if current_tab == 'relax' %} bg-teal-600 text-white shadow-lg shadow-teal-200 transform scale-105 {% else %} bg-white text-gray-500 hover:bg-teal-50 hover:text-teal-600 {% endif %}">
-            <i data-lucide="coffee" class="w-5 h-5"></i> Relax Zone
+            <i data-lucide="coffee" class="w-4 h-4 md:w-5 md:h-5"></i> Relax Zone
         </a>
 
         <a href="?tab=tool"
-            class="px-6 py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap
+            class="px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap text-sm md:text-base flex-shrink-0
             {% if current_tab == 'tool' %} bg-blue-600 text-white shadow-lg {% else %} bg-white text-gray-500 hover:bg-blue-50 hover:text-blue-600 {% endif %}">
-            <i data-lucide="wrench" class="w-5 h-5"></i> Tool Văn Phòng
+            <i data-lucide="wrench" class="w-4 h-4 md:w-5 md:h-5"></i> Tool Văn Phòng
         </a>
-        <a href="?tab=quote" class="px-6 py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap
+        <a href="?tab=quote" class="px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap text-sm md:text-base flex-shrink-0
             {% if current_tab == 'quote' %} bg-orange-600 text-white shadow-lg shadow-orange-200 transform scale-105 {% else %} bg-white text-gray-500 hover:bg-orange-50 hover:text-orange-600 {% endif %}">
-            <i data-lucide="quote" class="w-5 h-5"></i> Cảm hứng (Quote)
+            <i data-lucide="quote" class="w-4 h-4 md:w-5 md:h-5"></i> Cảm hứng (Quote)
         </a>
 
         <a href="?tab=pantry"
-            class="px-6 py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap
+            class="px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap text-sm md:text-base flex-shrink-0
             {% if current_tab == 'pantry' %} bg-orange-600 text-white shadow-lg {% else %} bg-white text-gray-500 hover:bg-orange-50 hover:text-orange-600 {% endif %}">
-            <i data-lucide="utensils" class="w-5 h-5"></i> Pantry
+            <i data-lucide="utensils" class="w-4 h-4 md:w-5 md:h-5"></i> Pantry
         </a>
 
         <a href="?tab=shop"
-            class="px-6 py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap
+            class="px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap text-sm md:text-base flex-shrink-0
             {% if current_tab == 'shop' %} bg-pink-600 text-white shadow-lg {% else %} bg-white text-gray-500 hover:bg-pink-50 hover:text-pink-600 {% endif %}">
-            <i data-lucide="shopping-bag" class="w-5 h-5"></i> Shop Decor
+            <i data-lucide="shopping-bag" class="w-4 h-4 md:w-5 md:h-5"></i> Shop Decor
         </a>
-        
     </div>
 
     {% if current_tab == 'confession' %}
 
-    <div class="bg-white p-2 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-wrap gap-2 items-center justify-between">
-
-        <div class="flex bg-gray-100 p-1 rounded-lg">
+    <div class="bg-white p-2 md:p-3 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+        <div class="flex bg-gray-100 p-1 rounded-lg overflow-x-auto no-scrollbar">
             <a href="?tab=confession&filter=pending"
-                class="px-4 py-1.5 rounded-md text-sm font-bold transition flex items-center gap-2
+                class="px-3 py-2 md:px-4 md:py-1.5 rounded-md text-xs md:text-sm font-bold transition flex items-center gap-2 whitespace-nowrap
                     {% if current_filter == 'pending' %} bg-white text-indigo-900 shadow-sm {% else %} text-gray-500 hover:text-gray-900 {% endif %}">
-                <i data-lucide="clock" class="w-4 h-4"></i> Chờ duyệt ({{ stats.pending }})
+                <i data-lucide="clock" class="w-3.5 h-3.5 md:w-4 md:h-4"></i> Chờ duyệt ({{ stats.pending }})
             </a>
             <a href="?tab=confession&filter=approved"
-                class="px-4 py-1.5 rounded-md text-sm font-bold transition flex items-center gap-2
+                class="px-3 py-2 md:px-4 md:py-1.5 rounded-md text-xs md:text-sm font-bold transition flex items-center gap-2 whitespace-nowrap
                     {% if current_filter == 'approved' %} bg-white text-indigo-900 shadow-sm {% else %} text-gray-500 hover:text-gray-900 {% endif %}">
-                <i data-lucide="check-circle" class="w-4 h-4"></i> Đã duyệt ({{ stats.approved }})
+                <i data-lucide="check-circle" class="w-3.5 h-3.5 md:w-4 md:h-4"></i> Đã duyệt ({{ stats.approved }})
             </a>
             <a href="?tab=confession&filter=reports"
-                class="px-4 py-1.5 rounded-md text-sm font-bold transition flex items-center gap-2
+                class="px-3 py-2 md:px-4 md:py-1.5 rounded-md text-xs md:text-sm font-bold transition flex items-center gap-2 whitespace-nowrap
                     {% if current_filter == 'reports' %} bg-white text-red-600 shadow-sm {% else %} text-gray-500 hover:text-red-600 {% endif %}">
-                <i data-lucide="flag" class="w-4 h-4"></i> Báo cáo ({{ stats.reports }})
+                <i data-lucide="flag" class="w-3.5 h-3.5 md:w-4 md:h-4"></i> Báo cáo ({{ stats.reports }})
             </a>
         </div>
 
         <button onclick="document.getElementById('noti-modal').classList.remove('hidden')"
-            class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-lg shadow-sm flex items-center gap-2 transition text-sm">
-            <i data-lucide="megaphone" class="w-4 h-4"></i> Gửi thông báo
+            class="px-4 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-lg shadow-sm flex items-center justify-center gap-2 transition text-sm w-full md:w-auto">
+            <i data-lucide="megaphone" class="w-4 h-4"></i> <span class="md:hidden lg:inline">Gửi thông báo</span>
         </button>
     </div>
 
@@ -88,45 +84,37 @@
     <div class="space-y-4">
         {% for report in reports %}
         <div class="bg-white rounded-xl shadow-sm border border-orange-200 overflow-hidden flex flex-col md:flex-row">
-            <div class="bg-orange-50 p-4 w-full md:w-1/3 border-r border-orange-100 flex flex-col justify-center">
+            <div class="bg-orange-50 p-4 w-full md:w-1/3 border-b md:border-b-0 md:border-r border-orange-100 flex flex-col justify-center">
                 <div class="flex items-center gap-2 mb-2">
-                    <span
-                        class="bg-orange-200 text-orange-800 text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">REPORT
-                        #{{ report.id }}</span>
-                    <span class="text-xs text-gray-500">{{ report.created_at|timesince }} trước</span>
+                    <span class="bg-orange-200 text-orange-800 text-[10px] md:text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">REPORT #{{ report.id }}</span>
+                    <span class="text-[10px] md:text-xs text-gray-500">{{ report.created_at|timesince }} trước</span>
                 </div>
-                <p class="text-sm font-bold text-gray-800">Người báo: <span class="text-indigo-600">{{
-                        report.user.username }}</span></p>
-                <p class="text-sm text-red-600 italic bg-white p-2 rounded border border-orange-100 mt-2">"{{
-                    report.reason }}"</p>
+                <p class="text-xs md:text-sm font-bold text-gray-800">Người báo: <span class="text-indigo-600">{{ report.user.username }}</span></p>
+                <p class="text-xs md:text-sm text-red-600 italic bg-white p-2 rounded border border-orange-100 mt-2">"{{ report.reason }}"</p>
             </div>
-            <div class="p-4 w-full md:w-1/3 border-r border-gray-100 bg-white">
-                <p class="text-xs text-gray-400 font-bold mb-2 uppercase">Bài viết bị report</p>
-                <div
-                    class="bg-gray-50 p-3 rounded-lg text-sm text-gray-700 border border-dashed border-gray-300 max-h-32 overflow-y-auto">
+            <div class="p-4 w-full md:w-1/3 border-b md:border-b-0 md:border-r border-gray-100 bg-white">
+                <p class="text-[10px] md:text-xs text-gray-400 font-bold mb-2 uppercase">Bài viết bị report</p>
+                <div class="bg-gray-50 p-3 rounded-lg text-xs md:text-sm text-gray-700 border border-dashed border-gray-300 max-h-32 overflow-y-auto">
                     {{ report.post.content }}
                 </div>
             </div>
-            <div class="p-4 w-full md:w-1/3 flex flex-col justify-center gap-2 bg-gray-50">
-                <form method="POST" class="w-full">
+            <div class="p-4 w-full md:w-1/3 flex flex-row md:flex-col justify-center gap-2 bg-gray-50 items-center">
+                <form method="POST" class="w-full flex-1 md:flex-none">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="resolve_report">
                     <input type="hidden" name="report_id" value="{{ report.id }}">
                     <input type="hidden" name="decision" value="delete">
-                    <button type="submit"
-                        class="w-full py-2 bg-red-600 text-white rounded-lg font-bold text-sm hover:bg-red-700 transition"
-                        onclick="return confirm('Xác nhận gỡ bài?')">
-                        <i data-lucide="trash-2" class="w-4 h-4 inline"></i> Gỡ bài
+                    <button type="submit" class="w-full py-2 bg-red-600 text-white rounded-lg font-bold text-xs md:text-sm hover:bg-red-700 transition" onclick="return confirm('Xác nhận gỡ bài?')">
+                        <i data-lucide="trash-2" class="w-3 h-3 md:w-4 md:h-4 inline"></i> Gỡ bài
                     </button>
                 </form>
-                <form method="POST" class="w-full">
+                <form method="POST" class="w-full flex-1 md:flex-none">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="resolve_report">
                     <input type="hidden" name="report_id" value="{{ report.id }}">
                     <input type="hidden" name="decision" value="ignore">
-                    <button type="submit"
-                        class="w-full py-2 bg-white border border-gray-300 text-gray-600 rounded-lg font-bold text-sm hover:bg-gray-100 transition">
-                        <i data-lucide="check" class="w-4 h-4 inline"></i> Bỏ qua
+                    <button type="submit" class="w-full py-2 bg-white border border-gray-300 text-gray-600 rounded-lg font-bold text-xs md:text-sm hover:bg-gray-100 transition">
+                        <i data-lucide="check" class="w-3 h-3 md:w-4 md:h-4 inline"></i> Bỏ qua
                     </button>
                 </form>
             </div>
@@ -134,30 +122,26 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300 text-gray-400">Không có báo
-        cáo nào.</div>
+    <div class="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300 text-gray-400">Không có báo cáo nào.</div>
     {% endif %}
 
     {% else %}
     {% if posts %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
         {% for post in posts %}
-        <div
-            class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full hover:shadow-md transition relative">
-            <div
-                class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-full 
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full hover:shadow-md transition relative">
+            <div class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-full 
                         {% if post.status == 'PENDING' %} bg-yellow-100 text-yellow-700 {% else %} bg-green-100 text-green-700 {% endif %}">
                 {{ post.get_status_display }}
             </div>
-            <div class="p-5 flex-1">
+            <div class="p-4 md:p-5 flex-1">
                 <div class="flex items-center gap-3 mb-3">
-                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold"></div>
+                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold">{{ post.pseudonym|slice:":1" }}</div>
                     <div>
                         <span class="font-bold text-sm text-gray-800 block">{{ post.pseudonym }}</span>
                     </div>
                 </div>
-                <div
-                    class="text-gray-800 text-sm leading-relaxed whitespace-pre-line bg-gray-50 p-3 rounded-xl border border-dashed border-gray-200 min-h-[80px]">
+                <div class="text-gray-800 text-sm leading-relaxed whitespace-pre-line bg-gray-50 p-3 rounded-xl border border-dashed border-gray-200 min-h-[80px]">
                     {{ post.content }}
                 </div>
             </div>
@@ -165,50 +149,35 @@
             <div class="p-3 bg-gray-50 border-t border-gray-100 grid grid-cols-2 gap-2">
                 {% if current_filter == 'pending' %}
                 <form method="POST">{% csrf_token %}
-                    <input type="hidden" name="post_id" value="{{ post.id }}"><input type="hidden" name="action"
-                        value="reject">
-                    <button
-                        class="w-full py-2 bg-white border border-red-200 text-red-600 text-xs font-bold rounded-lg hover:bg-red-50">Từ
-                        chối</button>
+                    <input type="hidden" name="post_id" value="{{ post.id }}"><input type="hidden" name="action" value="reject">
+                    <button class="w-full py-2 bg-white border border-red-200 text-red-600 text-xs font-bold rounded-lg hover:bg-red-50">Từ chối</button>
                 </form>
                 <form method="POST">{% csrf_token %}
-                    <input type="hidden" name="post_id" value="{{ post.id }}"><input type="hidden" name="action"
-                        value="approve">
-                    <button
-                        class="w-full py-2 bg-green-500 text-white text-xs font-bold rounded-lg hover:bg-green-600">Duyệt
-                        ngay</button>
+                    <input type="hidden" name="post_id" value="{{ post.id }}"><input type="hidden" name="action" value="approve">
+                    <button class="w-full py-2 bg-green-500 text-white text-xs font-bold rounded-lg hover:bg-green-600">Duyệt ngay</button>
                 </form>
                 {% else %}
-                <button onclick="openCommentModal('{{ post.id }}')"
-                    class="w-full py-2 bg-white border border-blue-200 text-blue-600 text-xs font-bold rounded-lg hover:bg-blue-50">QL
-                    Comment</button>
-                <button onclick="openDeleteModal('{{ post.id }}')"
-                    class="w-full py-2 bg-red-100 text-red-600 text-xs font-bold rounded-lg hover:bg-red-200">Gỡ &
-                    Phạt</button>
+                <button onclick="openCommentModal('{{ post.id }}')" class="w-full py-2 bg-white border border-blue-200 text-blue-600 text-xs font-bold rounded-lg hover:bg-blue-50">QL Comment</button>
+                <button onclick="openDeleteModal('{{ post.id }}')" class="w-full py-2 bg-red-100 text-red-600 text-xs font-bold rounded-lg hover:bg-red-200">Gỡ & Phạt</button>
                 {% endif %}
             </div>
 
-            <div id="comment-modal-{{ post.id }}"
-                class="hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 backdrop-blur-sm">
+            <div id="comment-modal-{{ post.id }}" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4 backdrop-blur-sm">
                 <div class="bg-white rounded-2xl w-full max-w-lg max-h-[80vh] flex flex-col shadow-2xl">
                     <div class="p-4 border-b flex justify-between items-center bg-gray-50 rounded-t-2xl">
-                        <h3 class="font-bold text-gray-800">Bình luận bài #{{ post.id }}</h3>
-                        <button onclick="document.getElementById('comment-modal-{{ post.id }}').classList.add('hidden')"
-                            class="text-gray-400"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        <h3 class="font-bold text-gray-800 text-sm md:text-base">Bình luận bài #{{ post.id }}</h3>
+                        <button onclick="document.getElementById('comment-modal-{{ post.id }}').classList.add('hidden')" class="text-gray-400 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
                     </div>
                     <div class="p-4 overflow-y-auto flex-1 space-y-3 custom-scrollbar">
                         {% for cmt in post.comments.all %}
-                        <div
-                            class="flex justify-between items-start gap-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <div class="flex justify-between items-start gap-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
                             <div class="flex-1">
                                 <div class="text-xs font-bold text-indigo-700">{{ cmt.author.username }}</div>
                                 <div class="text-sm text-gray-700 mt-1">{{ cmt.content }}</div>
                             </div>
                             <form method="POST">{% csrf_token %}
-                                <input type="hidden" name="action" value="delete_comment"><input type="hidden"
-                                    name="comment_id" value="{{ cmt.id }}">
-                                <button class="text-red-400 hover:text-red-600"><i data-lucide="trash"
-                                        class="w-4 h-4"></i></button>
+                                <input type="hidden" name="action" value="delete_comment"><input type="hidden" name="comment_id" value="{{ cmt.id }}">
+                                <button class="text-red-400 hover:text-red-600 p-1"><i data-lucide="trash" class="w-4 h-4"></i></button>
                             </form>
                         </div>
                         {% empty %}
@@ -225,112 +194,78 @@
     <div class="flex justify-center mt-6">
         <nav class="flex items-center gap-2 bg-white p-2 rounded-lg shadow-sm border border-gray-200">
             {% if posts.has_previous %}
-            <a href="?tab=confession&filter={{ current_filter }}&page={{ posts.previous_page_number }}"
-                class="px-3 py-1 hover:bg-gray-100 text-gray-600"><i data-lucide="chevron-left" class="w-4 h-4"></i></a>
+            <a href="?tab=confession&filter={{ current_filter }}&page={{ posts.previous_page_number }}" class="px-3 py-1 hover:bg-gray-100 text-gray-600"><i data-lucide="chevron-left" class="w-4 h-4"></i></a>
             {% endif %}
-            <span class="px-4 py-1 text-sm font-bold text-indigo-600">Trang {{ posts.number }} / {{
-                posts.paginator.num_pages }}</span>
+            <span class="px-4 py-1 text-sm font-bold text-indigo-600">Trang {{ posts.number }} / {{ posts.paginator.num_pages }}</span>
             {% if posts.has_next %}
-            <a href="?tab=confession&filter={{ current_filter }}&page={{ posts.next_page_number }}"
-                class="px-3 py-1 hover:bg-gray-100 text-gray-600"><i data-lucide="chevron-right"
-                    class="w-4 h-4"></i></a>
+            <a href="?tab=confession&filter={{ current_filter }}&page={{ posts.next_page_number }}" class="px-3 py-1 hover:bg-gray-100 text-gray-600"><i data-lucide="chevron-right" class="w-4 h-4"></i></a>
             {% endif %}
         </nav>
     </div>
     {% endif %}
 
     {% else %}
-    <div class="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300 text-gray-400">Danh sách
-        trống.</div>
+    <div class="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300 text-gray-400">Danh sách trống.</div>
     {% endif %}
     {% endif %}
 
     {% elif current_tab == 'relax' %}
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 animate-fade-in-down">
-        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <i data-lucide="youtube" class="w-6 h-6 text-red-600"></i> Cấu hình Video Health Page
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 md:p-6 animate-fade-in-down">
+        <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <i data-lucide="youtube" class="w-5 h-5 md:w-6 md:h-6 text-red-600"></i> Cấu hình Video Health Page
         </h2>
 
-        <div class="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm mb-6 flex items-start gap-3">
+        <div class="bg-blue-50 text-blue-800 p-3 md:p-4 rounded-xl text-xs md:text-sm mb-6 flex items-start gap-3">
             <i data-lucide="info" class="w-5 h-5 shrink-0"></i>
-            <span>Hệ thống sẽ tự động trích xuất <strong>ID Video</strong> từ link bạn dán vào. Hãy đảm bảo video cho
-                phép nhúng (Embedding).</span>
+            <span>Hệ thống sẽ tự động trích xuất <strong>ID Video</strong> từ link bạn dán vào. Hãy đảm bảo video cho phép nhúng (Embedding).</span>
         </div>
 
         <form method="POST" class="space-y-6">
             {% csrf_token %}
             <input type="hidden" name="action" value="update_health_config">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 <div class="space-y-2">
-                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700">
-                        <i data-lucide="accessibility" class="w-4 h-4 text-teal-500"></i> Yoga (Cổ Vai Gáy)
-                    </label>
-                    <input type="text" name="video_yoga" value="{{ health_configs.yoga|default:'' }}"
-                        class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-teal-100 outline-none"
-                        placeholder="Dán link hoặc ID">
+                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><i data-lucide="accessibility" class="w-4 h-4 text-teal-500"></i> Yoga (Cổ Vai Gáy)</label>
+                    <input type="text" name="video_yoga" value="{{ health_configs.yoga|default:'' }}" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-teal-100 outline-none" placeholder="Dán link hoặc ID">
                 </div>
-
                 <div class="space-y-2">
-                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700">
-                        <i data-lucide="split" class="w-4 h-4 text-orange-500"></i> Cột Sống & Hông
-                    </label>
-                    <input type="text" name="video_back" value="{{ health_configs.back|default:'' }}"
-                        class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-100 outline-none"
-                        placeholder="Dán link hoặc ID">
+                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><i data-lucide="split" class="w-4 h-4 text-orange-500"></i> Cột Sống & Hông</label>
+                    <input type="text" name="video_back" value="{{ health_configs.back|default:'' }}" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-100 outline-none" placeholder="Dán link hoặc ID">
                 </div>
-
                 <div class="space-y-2">
-                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700">
-                        <i data-lucide="hand" class="w-4 h-4 text-blue-500"></i> Cổ Tay & Ngón
-                    </label>
-                    <input type="text" name="video_wrist" value="{{ health_configs.wrist|default:'' }}"
-                        class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-100 outline-none"
-                        placeholder="Dán link hoặc ID">
+                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><i data-lucide="hand" class="w-4 h-4 text-blue-500"></i> Cổ Tay & Ngón</label>
+                    <input type="text" name="video_wrist" value="{{ health_configs.wrist|default:'' }}" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="Dán link hoặc ID">
                 </div>
-
                 <div class="space-y-2">
-                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700">
-                        <i data-lucide="flower" class="w-4 h-4 text-purple-500"></i> Thiền Định
-                    </label>
-                    <input type="text" name="video_meditation" value="{{ health_configs.meditation|default:'' }}"
-                        class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-purple-100 outline-none"
-                        placeholder="Dán link hoặc ID">
+                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><i data-lucide="flower" class="w-4 h-4 text-purple-500"></i> Thiền Định</label>
+                    <input type="text" name="video_meditation" value="{{ health_configs.meditation|default:'' }}" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-purple-100 outline-none" placeholder="Dán link hoặc ID">
                 </div>
-
                 <div class="space-y-2">
-                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700">
-                        <i data-lucide="headphones" class="w-4 h-4 text-indigo-500"></i> Nhạc Focus (Lofi)
-                    </label>
-                    <input type="text" name="video_music" value="{{ health_configs.music|default:'' }}"
-                        class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-100 outline-none"
-                        placeholder="Dán link hoặc ID">
+                    <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><i data-lucide="headphones" class="w-4 h-4 text-indigo-500"></i> Nhạc Focus (Lofi)</label>
+                    <input type="text" name="video_music" value="{{ health_configs.music|default:'' }}" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-100 outline-none" placeholder="Dán link hoặc ID">
                 </div>
             </div>
 
             <div class="pt-4 border-t flex justify-end">
-                <button type="submit"
-                    class="bg-teal-600 text-white font-bold py-2.5 px-8 rounded-xl hover:bg-teal-700 shadow-lg shadow-teal-100 transition-all flex items-center gap-2">
+                <button type="submit" class="w-full md:w-auto bg-teal-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-teal-700 shadow-lg shadow-teal-100 transition-all flex items-center justify-center gap-2">
                     <i data-lucide="save" class="w-5 h-5"></i> Lưu cấu hình Video
                 </button>
             </div>
         </form>
     </div>
+
     {% elif current_tab == 'pantry' %}
     <div class="space-y-6">
-
-        <div
-            class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col md:flex-row justify-between items-center gap-4 animate-fade-in-down">
-            <div>
-                <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                    <span class="bg-orange-100 text-orange-600 p-2 rounded-lg"><i data-lucide="store"
-                            class="w-6 h-6"></i></span>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4 animate-fade-in-down">
+            <div class="text-center md:text-left">
+                <h2 class="text-lg md:text-xl font-bold text-gray-800 flex items-center justify-center md:justify-start gap-2">
+                    <span class="bg-orange-100 text-orange-600 p-2 rounded-lg"><i data-lucide="store" class="w-5 h-5 md:w-6 md:h-6"></i></span>
                     Danh sách Quán Nổi Bật
                 </h2>
-                <p class="text-sm text-gray-500 mt-1">Các quán này sẽ xuất hiện đầu tiên tại trang "Trưa nay ăn gì".</p>
+                <p class="text-xs md:text-sm text-gray-500 mt-1">Các quán này sẽ xuất hiện đầu tiên tại trang "Trưa nay ăn gì".</p>
             </div>
-            <button onclick="document.getElementById('add-res-modal').classList.remove('hidden')"
-                class="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-orange-200 transition flex items-center gap-2">
+            <button onclick="document.getElementById('add-res-modal').classList.remove('hidden')" class="w-full md:w-auto bg-orange-600 hover:bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-orange-200 transition flex items-center justify-center gap-2 text-sm">
                 <i data-lucide="plus-circle" class="w-5 h-5"></i> Thêm quán mới
             </button>
         </div>
@@ -338,54 +273,40 @@
         {% if pantry_restaurants %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for res in pantry_restaurants %}
-            <div
-                class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition group relative">
-
+            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition group relative">
                 <div class="h-40 bg-gray-100 relative overflow-hidden">
                     {% if res.image %}
-                    <img src="{{ res.image.url }}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <img src="{{ res.image.url }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     {% else %}
                     <div class="w-full h-full flex flex-col items-center justify-center text-gray-400">
-                        <i data-lucide="image" class="w-8 h-8 mb-2"></i>
-                        <span class="text-xs">Chưa có ảnh</span>
+                        <i data-lucide="image" class="w-8 h-8 mb-2"></i><span class="text-xs">Chưa có ảnh</span>
                     </div>
                     {% endif %}
-
-                    <div
-                        class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
                         <form method="POST" onsubmit="return confirm('Bạn chắc chắn muốn xóa quán {{ res.name }}?');">
                             {% csrf_token %}
-                            <input type="hidden" name="action" value="delete_restaurant">
-                            <input type="hidden" name="res_id" value="{{ res.id }}">
-                            <button type="submit"
-                                class="bg-red-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-red-700 flex items-center gap-2 transform hover:scale-105 transition">
+                            <input type="hidden" name="action" value="delete_restaurant"><input type="hidden" name="res_id" value="{{ res.id }}">
+                            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-red-700 flex items-center gap-2 transform hover:scale-105 transition">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i> Xóa quán
                             </button>
                         </form>
                     </div>
                 </div>
-
                 <div class="p-4">
                     <div class="flex justify-between items-start mb-1">
-                        <h3 class="font-bold text-gray-800 text-lg line-clamp-1" title="{{ res.name }}">{{ res.name }}
-                        </h3>
-                        <span
-                            class="bg-yellow-100 text-yellow-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <h3 class="font-bold text-gray-800 text-base md:text-lg line-clamp-1" title="{{ res.name }}">{{ res.name }}</h3>
+                        <span class="bg-yellow-100 text-yellow-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
                             {{ res.rating }} <i data-lucide="star" class="w-3 h-3 fill-current"></i>
                         </span>
                     </div>
-                    <p class="text-sm text-gray-500 flex items-start gap-1.5 mb-3 h-10 overflow-hidden">
+                    <p class="text-xs md:text-sm text-gray-500 flex items-start gap-1.5 mb-3 h-10 overflow-hidden">
                         <i data-lucide="map-pin" class="w-4 h-4 shrink-0 mt-0.5 text-orange-400"></i>
                         <span class="line-clamp-2">{{ res.address }}</span>
                     </p>
-
                     <div class="flex justify-between items-center pt-3 border-t border-gray-100">
-                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">{{ res.category
-                            }}</span>
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">{{ res.category }}</span>
                         {% if res.url_foody %}
-                        <a href="{{ res.url_foody }}" target="_blank"
-                            class="text-xs text-gray-400 hover:text-orange-500 flex items-center gap-1">
+                        <a href="{{ res.url_foody }}" target="_blank" class="text-xs text-gray-400 hover:text-orange-500 flex items-center gap-1">
                             Link App <i data-lucide="external-link" class="w-3 h-3"></i>
                         </a>
                         {% endif %}
@@ -403,80 +324,62 @@
             <p class="text-gray-400 mt-1">Hãy thêm quán ăn để hiển thị trong mục "Quán Nổi Bật".</p>
         </div>
         {% endif %}
-
     </div>
+
     {% elif current_tab == 'shop' %}
     <div class="space-y-6">
-        <div
-            class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col md:flex-row justify-between items-center gap-4 animate-fade-in-down">
-            <div>
-                <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                    <span class="bg-pink-100 text-pink-600 p-2 rounded-lg"><i data-lucide="shopping-bag"
-                            class="w-6 h-6"></i></span>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4 animate-fade-in-down">
+            <div class="text-center md:text-left">
+                <h2 class="text-lg md:text-xl font-bold text-gray-800 flex items-center justify-center md:justify-start gap-2">
+                    <span class="bg-pink-100 text-pink-600 p-2 rounded-lg"><i data-lucide="shopping-bag" class="w-5 h-5 md:w-6 md:h-6"></i></span>
                     Quản lý Cửa hàng Decor
                 </h2>
-                <p class="text-sm text-gray-500 mt-1">Quản lý các vật phẩm đổi bằng điểm KPI.</p>
+                <p class="text-xs md:text-sm text-gray-500 mt-1">Quản lý các vật phẩm đổi bằng điểm KPI.</p>
             </div>
-            <button onclick="document.getElementById('add-product-modal').classList.remove('hidden')"
-                class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-pink-200 transition flex items-center gap-2">
+            <button onclick="document.getElementById('add-product-modal').classList.remove('hidden')" class="w-full md:w-auto bg-pink-600 hover:bg-pink-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-pink-200 transition flex items-center justify-center gap-2 text-sm">
                 <i data-lucide="plus-circle" class="w-5 h-5"></i> Thêm sản phẩm mới
             </button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {% for item in products %}
-            <div
-                class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition group relative">
+            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition group relative">
                 <div class="h-48 bg-gray-100 relative overflow-hidden">
                     {% if item.image %}
-                    <img src="{{ item.image.url }}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <img src="{{ item.image.url }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     {% else %}
-                    <div class="w-full h-full flex items-center justify-center text-gray-300"><i data-lucide="image"
-                            class="w-10 h-10"></i></div>
+                    <div class="w-full h-full flex items-center justify-center text-gray-300"><i data-lucide="image" class="w-10 h-10"></i></div>
                     {% endif %}
-
-                    <div
-                        class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
                         <form method="POST" onsubmit="return confirm('Xóa sản phẩm {{ item.name }}?');">
                             {% csrf_token %}
-                            <input type="hidden" name="action" value="delete_product">
-                            <input type="hidden" name="product_id" value="{{ item.id }}">
-                            <button type="submit"
-                                class="bg-red-600 text-white p-3 rounded-full hover:scale-110 transition shadow-xl">
+                            <input type="hidden" name="action" value="delete_product"><input type="hidden" name="product_id" value="{{ item.id }}">
+                            <button type="submit" class="bg-red-600 text-white p-3 rounded-full hover:scale-110 transition shadow-xl">
                                 <i data-lucide="trash-2" class="w-5 h-5"></i>
                             </button>
                         </form>
                     </div>
                 </div>
                 <div class="p-4">
-                    <div class="flex justify-between items-start mb-1">
-                        <h3 class="font-bold text-gray-800 truncate" title="{{ item.name }}">{{ item.name }}</h3>
-                    </div>
+                    <h3 class="font-bold text-gray-800 truncate text-base" title="{{ item.name }}">{{ item.name }}</h3>
                     <div class="flex items-center gap-1 text-pink-600 font-black text-lg">
                         {{ item.price }} <span class="text-[10px] text-gray-400 font-bold uppercase ml-1">KPI Pts</span>
                     </div>
                     <div class="mt-3 flex items-center gap-2">
-                        <span class="text-[10px] font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded-md">{{
-                            item.category }}</span>
+                        <span class="text-[10px] font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded-md">{{ item.category }}</span>
                         {% if item.is_active %}
-                        <span class="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-1 rounded-md">Đang
-                            bán</span>
+                        <span class="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-1 rounded-md">Đang bán</span>
                         {% endif %}
                     </div>
                 </div>
             </div>
             {% empty %}
-            <div
-                class="col-span-full text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300 text-gray-400 italic">
-                Cửa hàng đang trống. Hãy thêm sản phẩm đầu tiên!
-            </div>
+            <div class="col-span-full text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300 text-gray-400 italic">Cửa hàng đang trống. Hãy thêm sản phẩm đầu tiên!</div>
             {% endfor %}
         </div>
     </div>
-        </div>
-    {% endif %}
-    {% if current_tab == 'quote' %}
+
+    {% elif current_tab == 'quote' %}
     <div class="space-y-6 animate-fade-in">
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="bg-orange-500 p-4">
@@ -484,17 +387,14 @@
                     <i data-lucide="plus-circle" class="w-5 h-5"></i> Thêm câu nói mới
                 </h3>
             </div>
-            <form method="POST" class="p-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <form method="POST" class="p-4 md:p-6 grid grid-cols-1 md:grid-cols-4 gap-4">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="add_quote">
                 <div class="md:col-span-2">
-                    <textarea name="content" required
-                        class="w-full border-gray-200 rounded-2xl p-4 text-sm focus:ring-orange-500"
-                        placeholder="Nội dung câu nói..."></textarea>
+                    <textarea name="content" required class="w-full border-gray-200 rounded-2xl p-3 md:p-4 text-sm focus:ring-orange-500" placeholder="Nội dung câu nói..."></textarea>
                 </div>
                 <div class="space-y-3">
-                    <input type="text" name="author" placeholder="Tác giả"
-                        class="w-full border-gray-200 rounded-xl p-2 text-sm">
+                    <input type="text" name="author" placeholder="Tác giả" class="w-full border-gray-200 rounded-xl p-2 text-sm">
                     <select name="time_category" class="w-full border-gray-200 rounded-xl p-2 text-sm">
                         <option value="morning">Buổi Sáng</option>
                         <option value="work">Giờ Làm Việc</option>
@@ -503,249 +403,58 @@
                     </select>
                 </div>
                 <div class="flex items-end">
-                    <button type="submit"
-                        class="w-full bg-orange-500 text-white font-bold py-3 rounded-2xl hover:bg-orange-600 transition shadow-lg shadow-orange-100">
-                        Lưu
-                    </button>
+                    <button type="submit" class="w-full bg-orange-500 text-white font-bold py-3 rounded-2xl hover:bg-orange-600 transition shadow-lg shadow-orange-100 text-sm">Lưu</button>
                 </div>
             </form>
         </div>
 
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-            <table class="w-full text-left">
-                <thead class="bg-gray-50 text-[10px] font-black text-gray-400 uppercase">
-                    <tr>
-                        <th class="p-4">Nội dung câu nói</th>
-                        <th class="p-4">Buổi</th>
-                        <th class="p-4">Trạng thái</th>
-                        <th class="p-4 text-right">Xóa</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-50">
-                    {% for q in all_quotes %}
-                    <tr class="hover:bg-orange-50/30 transition">
-                        <td class="p-4">
-                            <p class="text-sm font-medium text-gray-700 italic">"{{ q.content }}"</p>
-                            <span class="text-[10px] text-gray-400">— {{ q.author }}</span>
-                        </td>
-                        <td class="p-4">
-                            <span class="text-[10px] font-bold px-2 py-1 rounded-full 
-                            {% if q.time_category == 'morning' %}bg-yellow-100 text-yellow-600
-                            {% elif q.time_category == 'lunch' %}bg-orange-100 text-orange-600
-                            {% else %}bg-blue-100 text-blue-600{% endif %}">
-                                {{ q.get_time_category_display }}
-                            </span>
-                        </td>
-                        <td class="p-4">
-                            <div class="w-10 h-5 {% if q.is_active %}bg-green-500{% else %}bg-gray-200{% endif %} rounded-full relative cursor-pointer"
-                                onclick="location.href='#'">
-                                <div
-                                    class="w-4 h-4 bg-white rounded-full absolute top-0.5 {% if q.is_active %}right-0.5{% else %}left-0.5{% endif %}">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left min-w-[600px]">
+                    <thead class="bg-gray-50 text-[10px] font-black text-gray-400 uppercase">
+                        <tr>
+                            <th class="p-4">Nội dung câu nói</th>
+                            <th class="p-4">Buổi</th>
+                            <th class="p-4">Trạng thái</th>
+                            <th class="p-4 text-right">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        {% for q in all_quotes %}
+                        <tr class="hover:bg-orange-50/30 transition">
+                            <td class="p-4">
+                                <p class="text-sm font-medium text-gray-700 italic line-clamp-2">"{{ q.content }}"</p>
+                                <span class="text-[10px] text-gray-400">— {{ q.author }}</span>
+                            </td>
+                            <td class="p-4">
+                                <span class="text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap
+                                {% if q.time_category == 'morning' %}bg-yellow-100 text-yellow-600
+                                {% elif q.time_category == 'lunch' %}bg-orange-100 text-orange-600
+                                {% else %}bg-blue-100 text-blue-600{% endif %}">
+                                    {{ q.get_time_category_display }}
+                                </span>
+                            </td>
+                            <td class="p-4">
+                                <div class="w-10 h-5 {% if q.is_active %}bg-green-500{% else %}bg-gray-200{% endif %} rounded-full relative cursor-pointer" onclick="location.href='#'">
+                                    <div class="w-4 h-4 bg-white rounded-full absolute top-0.5 {% if q.is_active %}right-0.5{% else %}left-0.5{% endif %}"></div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="p-4 text-right">
-                            <form method="POST" class="inline">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="delete_quote">
-                                <input type="hidden" name="quote_id" value="{{ q.id }}">
-                                <button type="submit" class="text-red-300 hover:text-red-500"><i data-lucide="trash-2"
-                                        class="w-4 h-4"></i></button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4" class="p-10 text-center text-gray-400">Chưa có câu quote nào.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-<div id="add-quote-modal" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-down">
-        <div class="bg-orange-600 p-4 flex justify-between items-center text-white">
-            <h3 class="text-lg font-bold flex items-center gap-2"><i data-lucide="plus-circle" class="w-5 h-5"></i> Thêm Quote Mới</h3>
-            <button onclick="document.getElementById('add-quote-modal').classList.add('hidden')" class="hover:rotate-90 transition duration-300">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-        </div>
-        <form method="POST" class="p-6 space-y-4">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="add_quote">
-            
-            <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nội dung câu nói <span class="text-red-500">*</span></label>
-                <textarea name="content" rows="3" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500" required placeholder="VD: Đừng bao giờ để đến ngày mai..."></textarea>
+                            </td>
+                            <td class="p-4 text-right">
+                                <form method="POST" class="inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete_quote"><input type="hidden" name="quote_id" value="{{ q.id }}">
+                                    <button type="submit" class="text-red-300 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="p-10 text-center text-gray-400">Chưa có câu quote nào.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tác giả</label>
-                    <input type="text" name="author" value="Sếp ẩn danh" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Xuất hiện vào buổi</label>
-                    <select name="time_category" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500">
-                        <option value="morning">Buổi Sáng</option>
-                        <option value="work">Giờ Làm Việc</option>
-                        <option value="lunch">Buổi Trưa</option>
-                        <option value="chill">Cuối Ngày/Tối</option>
-                    </select>
-                </div>
-            </div>
-
-            <button type="submit" class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 shadow-lg shadow-orange-100 transition-all">
-                Lưu Câu Nói
-            </button>
-        </form>
-    </div>
-</div>
-    <div id="add-product-modal"
-        class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-down">
-            <div class="bg-pink-600 p-4 flex justify-between items-center text-white">
-                <h3 class="text-lg font-bold flex items-center gap-2"><i data-lucide="package-plus" class="w-5 h-5"></i>
-                    Đăng sản phẩm mới</h3>
-                <button onclick="document.getElementById('add-product-modal').classList.add('hidden')"
-                    class="hover:rotate-90 transition duration-300">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <form method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="add_product">
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên vật phẩm <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" name="p_name"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500"
-                        required>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Giá (KPI Points) <span
-                                class="text-red-500">*</span></label>
-                        <input type="number" name="p_price"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500"
-                            required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Danh mục</label>
-                        <select name="p_category"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500">
-                            <option value="Cây xanh">Cây xanh</option>
-                            <option value="Đèn bàn">Đèn bàn</option>
-                            <option value="Phụ kiện">Phụ kiện</option>
-                            <option value="Tượng/Mô hình">Tượng/Mô hình</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Hình ảnh sản phẩm</label>
-                    <div
-                        class="relative group h-32 w-full border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center bg-gray-50 hover:bg-pink-50 transition cursor-pointer overflow-hidden">
-                        <input type="file" name="p_image" class="absolute inset-0 opacity-0 cursor-pointer"
-                            onchange="previewProductImage(this)">
-                        <div id="product-preview-zone" class="text-center">
-                            <i data-lucide="upload-cloud" class="w-8 h-8 text-gray-400 mx-auto mb-1"></i>
-                            <p class="text-[10px] text-gray-500">JPG, PNG (Tỷ lệ 1:1 là tốt nhất)</p>
-                        </div>
-                        <img id="product-img-preview" class="hidden absolute inset-0 w-full h-full object-cover">
-                    </div>
-                </div>
-
-                <button type="submit"
-                    class="w-full bg-pink-600 text-white font-bold py-3 rounded-xl hover:bg-pink-700 shadow-lg shadow-pink-100 transition-all">
-                    Lưu sản phẩm
-                </button>
-            </form>
         </div>
     </div>
-
-    <div id="add-res-modal"
-        class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-0 overflow-hidden animate-fade-in-down">
-
-            <div class="bg-orange-600 p-4 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="store" class="w-5 h-5"></i> Thêm Quán Ăn Mới
-                </h3>
-                <button onclick="document.getElementById('add-res-modal').classList.add('hidden')"
-                    class="text-orange-200 hover:text-white transition">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-
-            <form method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="add_restaurant">
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên quán ăn <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" name="res_name" placeholder="Ví dụ: Cơm Tấm Sài Gòn"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none"
-                        required>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Địa chỉ <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" name="res_address" placeholder="Ví dụ: 123 Nguyễn Văn Linh..."
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none"
-                        required>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Loại hình</label>
-                        <select name="res_category"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none">
-                            <option value="Cơm trưa">Cơm trưa</option>
-                            <option value="Đồ nước">Đồ nước (Phở/Bún)</option>
-                            <option value="Ăn vặt">Ăn vặt</option>
-                            <option value="Trà sữa/Cafe">Trà sữa/Cafe</option>
-                            <option value="Nhậu nhẹt">Nhậu nhẹt</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Link App (Optional)</label>
-                        <input type="url" name="res_url" placeholder="ShopeeFood/Grab..."
-                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Ảnh đại diện</label>
-                    <label
-                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-orange-50 hover:border-orange-300 transition">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <i data-lucide="cloud-upload" class="w-8 h-8 text-gray-400 mb-2"></i>
-                            <p class="text-xs text-gray-500">Click để tải ảnh lên (JPG, PNG)</p>
-                        </div>
-                        <input type="file" name="res_image" class="hidden" accept="image/*"
-                            onchange="previewImage(this)">
-                    </label>
-                    <p id="file-name" class="text-xs text-center text-orange-600 mt-2 font-bold"></p>
-                </div>
-
-                <div class="pt-4 mt-2">
-                    <button type="submit"
-                        class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 shadow-lg shadow-orange-200 transition">
-                        Lưu Quán Mới
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-
     {% else %}
     <div class="text-center py-24 bg-white rounded-2xl border border-dashed border-gray-300">
         <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -756,16 +465,13 @@
     </div>
     {% endif %}
 
-
 </div>
 
-<div id="noti-modal"
-    class="hidden fixed inset-0 z-50 bg-indigo-900 bg-opacity-40 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6">
+<div id="noti-modal" class="hidden fixed inset-0 z-50 bg-indigo-900 bg-opacity-40 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6 mx-4 md:mx-0">
         <div class="flex justify-between items-center mb-4 border-b pb-2">
             <h3 class="text-lg font-bold text-indigo-900">Soạn thông báo</h3>
-            <button onclick="document.getElementById('noti-modal').classList.add('hidden')" class="text-gray-400"><i
-                    data-lucide="x" class="w-5 h-5"></i></button>
+            <button onclick="document.getElementById('noti-modal').classList.add('hidden')" class="text-gray-400"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
         <form method="POST">
             {% csrf_token %}
@@ -773,46 +479,134 @@
             <div class="mb-4">
                 <label class="block text-sm font-medium mb-2">Gửi đến:</label>
                 <div class="flex gap-4">
-                    <label class="flex items-center gap-2 p-2 border rounded"><input type="radio" name="target_type"
-                            value="SINGLE" checked onclick="toggleUserField(true)"> 1 User</label>
-                    <label class="flex items-center gap-2 p-2 border rounded border-red-100"><input type="radio"
-                            name="target_type" value="ALL" onclick="toggleUserField(false)"> <span
-                            class="text-red-600 font-bold">All Users</span></label>
+                    <label class="flex items-center gap-2 p-2 border rounded cursor-pointer"><input type="radio" name="target_type" value="SINGLE" checked onclick="toggleUserField(true)"> 1 User</label>
+                    <label class="flex items-center gap-2 p-2 border rounded border-red-100 cursor-pointer"><input type="radio" name="target_type" value="ALL" onclick="toggleUserField(false)"> <span class="text-red-600 font-bold">All Users</span></label>
                 </div>
             </div>
             <div id="target-user-field" class="mb-4">
-                <input type="text" name="target_username" class="w-full border rounded-lg px-3 py-2"
-                    placeholder="Username người nhận...">
+                <input type="text" name="target_username" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Username người nhận...">
             </div>
             <div class="mb-4 space-y-3">
-                <input type="text" name="noti_title" class="w-full border rounded-lg px-3 py-2 font-bold"
-                    placeholder="Tiêu đề" required>
-                <textarea name="noti_content" rows="4" class="w-full border rounded-lg px-3 py-2"
-                    placeholder="Nội dung..." required></textarea>
+                <input type="text" name="noti_title" class="w-full border rounded-lg px-3 py-2 font-bold text-sm" placeholder="Tiêu đề" required>
+                <textarea name="noti_content" rows="4" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Nội dung..." required></textarea>
             </div>
             <div class="flex justify-end gap-2">
-                <button type="button" onclick="document.getElementById('noti-modal').classList.add('hidden')"
-                    class="px-4 py-2 text-gray-600">Hủy</button>
-                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-bold">Gửi ngay</button>
+                <button type="button" onclick="document.getElementById('noti-modal').classList.add('hidden')" class="px-4 py-2 text-gray-600 text-sm">Hủy</button>
+                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-bold text-sm">Gửi ngay</button>
             </div>
         </form>
     </div>
 </div>
 
-<div id="delete-modal"
-    class="hidden fixed inset-0 z-50 bg-red-900 bg-opacity-20 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl p-6">
+<div id="delete-modal" class="hidden fixed inset-0 z-50 bg-red-900 bg-opacity-20 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl p-6 mx-4 md:mx-0">
         <h3 class="text-lg font-bold text-red-600 mb-2">Xác nhận gỡ bài</h3>
         <form method="POST">
             {% csrf_token %}
             <input type="hidden" name="action" value="delete_notify">
             <input type="hidden" id="modal_post_id" name="post_id" value="">
             <label class="block text-sm font-medium text-gray-700 mb-1">Lý do vi phạm:</label>
-            <textarea name="violation_reason" rows="3" class="w-full border rounded-lg p-2 mb-4" required></textarea>
+            <textarea name="violation_reason" rows="3" class="w-full border rounded-lg p-2 mb-4 text-sm" required></textarea>
             <div class="flex justify-end gap-3">
-                <button type="button" onclick="document.getElementById('delete-modal').classList.add('hidden')"
-                    class="px-4 py-2 text-gray-600">Hủy</button>
-                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg font-bold">Gỡ bài</button>
+                <button type="button" onclick="document.getElementById('delete-modal').classList.add('hidden')" class="px-4 py-2 text-gray-600 text-sm">Hủy</button>
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg font-bold text-sm">Gỡ bài</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="add-product-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-down mx-4 md:mx-0 max-h-[90vh] overflow-y-auto">
+        <div class="bg-pink-600 p-4 flex justify-between items-center text-white">
+            <h3 class="text-lg font-bold flex items-center gap-2"><i data-lucide="package-plus" class="w-5 h-5"></i> Đăng sản phẩm mới</h3>
+            <button onclick="document.getElementById('add-product-modal').classList.add('hidden')" class="hover:rotate-90 transition duration-300">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <form method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add_product">
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên vật phẩm <span class="text-red-500">*</span></label>
+                <input type="text" name="p_name" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500" required>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Giá (KPI Pts) <span class="text-red-500">*</span></label>
+                    <input type="number" name="p_price" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Danh mục</label>
+                    <select name="p_category" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500">
+                        <option value="Cây xanh">Cây xanh</option>
+                        <option value="Đèn bàn">Đèn bàn</option>
+                        <option value="Phụ kiện">Phụ kiện</option>
+                        <option value="Tượng/Mô hình">Tượng/Mô hình</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Hình ảnh sản phẩm</label>
+                <div class="relative group h-32 w-full border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center bg-gray-50 hover:bg-pink-50 transition cursor-pointer overflow-hidden">
+                    <input type="file" name="p_image" class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewProductImage(this)">
+                    <div id="product-preview-zone" class="text-center">
+                        <i data-lucide="upload-cloud" class="w-8 h-8 text-gray-400 mx-auto mb-1"></i>
+                        <p class="text-[10px] text-gray-500">JPG, PNG (Tỷ lệ 1:1 là tốt nhất)</p>
+                    </div>
+                    <img id="product-img-preview" class="hidden absolute inset-0 w-full h-full object-cover">
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-pink-600 text-white font-bold py-3 rounded-xl hover:bg-pink-700 shadow-lg shadow-pink-100 transition-all text-sm">Lưu sản phẩm</button>
+        </form>
+    </div>
+</div>
+
+<div id="add-res-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-0 overflow-hidden animate-fade-in-down mx-4 md:mx-0 max-h-[90vh] overflow-y-auto">
+        <div class="bg-orange-600 p-4 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2"><i data-lucide="store" class="w-5 h-5"></i> Thêm Quán Ăn Mới</h3>
+            <button onclick="document.getElementById('add-res-modal').classList.add('hidden')" class="text-orange-200 hover:text-white transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+        <form method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add_restaurant">
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên quán ăn <span class="text-red-500">*</span></label>
+                <input type="text" name="res_name" placeholder="Ví dụ: Cơm Tấm Sài Gòn" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none" required>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Địa chỉ <span class="text-red-500">*</span></label>
+                <input type="text" name="res_address" placeholder="Ví dụ: 123 Nguyễn Văn Linh..." class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none" required>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Loại hình</label>
+                    <select name="res_category" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none">
+                        <option value="Cơm trưa">Cơm trưa</option>
+                        <option value="Đồ nước">Đồ nước (Phở/Bún)</option>
+                        <option value="Ăn vặt">Ăn vặt</option>
+                        <option value="Trà sữa/Cafe">Trà sữa/Cafe</option>
+                        <option value="Nhậu nhẹt">Nhậu nhẹt</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Link App (Optional)</label>
+                    <input type="url" name="res_url" placeholder="ShopeeFood/Grab..." class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Ảnh đại diện</label>
+                <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-orange-50 hover:border-orange-300 transition">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <i data-lucide="cloud-upload" class="w-8 h-8 text-gray-400 mb-2"></i>
+                        <p class="text-xs text-gray-500">Click để tải ảnh lên (JPG, PNG)</p>
+                    </div>
+                    <input type="file" name="res_image" class="hidden" accept="image/*" onchange="previewImage(this)">
+                </label>
+                <p id="file-name" class="text-xs text-center text-orange-600 mt-2 font-bold"></p>
+            </div>
+            <div class="pt-4 mt-2">
+                <button type="submit" class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 shadow-lg shadow-orange-200 transition text-sm">Lưu Quán Mới</button>
             </div>
         </form>
     </div>
@@ -829,8 +623,6 @@
         if (show) { field.classList.remove('hidden'); field.querySelector('input').required = true; }
         else { field.classList.add('hidden'); field.querySelector('input').required = false; }
     }
-</script>
-<script>
     function previewImage(input) {
         const fileName = document.getElementById('file-name');
         if (input.files && input.files[0]) {
@@ -851,5 +643,11 @@
         }
     }
 </script>
+
+<style>
+    /* Ẩn scrollbar */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 
 {% endblock %}
