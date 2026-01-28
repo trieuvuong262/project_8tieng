@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto pb-20 px-4">
+    <div class="bg-slate-900 rounded-[3rem] p-10 text-white mb-12 relative overflow-hidden">
+        <div class="relative z-10 max-w-2xl">
+            <h1 class="text-4xl font-black mb-4 tracking-tighter">Nâng Cấp Góc Làm Việc</h1>
+            <p class="text-slate-400 text-lg">Tổng hợp những món đồ Decor "chữa lành" và tăng năng suất được tuyển chọn riêng cho dân văn phòng.</p>
+        </div>
+        <i data-lucide="palmtree" class="absolute -right-10 -bottom-10 w-80 h-80 text-white opacity-5 rotate-12"></i>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        {% for product in products %}
+        <div class="group flex flex-col">
+            <div class="aspect-[4/5] relative overflow-hidden rounded-[2.5rem] bg-gray-100 mb-4 shadow-sm group-hover:shadow-2xl group-hover:-translate-y-2 transition-all duration-500">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="w-full h-full object-cover">
+                {% endif %}
+                
+                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <a href="{{ product.affiliate_url }}" target="_blank" 
+                       class="bg-white text-gray-900 px-6 py-3 rounded-full font-bold shadow-xl transform scale-90 group-hover:scale-100 transition-all">
+                        Xem chi tiết
+                    </a>
+                </div>
+
+                {% if product.is_hot %}
+                <span class="absolute top-5 left-5 bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">MUST HAVE</span>
+                {% endif %}
+            </div>
+
+            <div class="px-2">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ product.category }}</span>
+                    <span class="text-rose-500 font-black text-sm">{{ product.price_display }}</span>
+                </div>
+                <h3 class="text-gray-800 font-bold text-lg leading-tight group-hover:text-indigo-600 transition-colors">
+                    <a href="{{ product.affiliate_url }}" target="_blank">{{ product.name }}</a>
+                </h3>
+                
+                <a href="{{ product.affiliate_url }}" target="_blank" class="mt-3 inline-flex items-center text-[11px] font-bold text-indigo-500 uppercase tracking-tighter hover:gap-2 transition-all">
+                    Kiểm tra hàng trên Shopee/Lazada <i data-lucide="external-link" class="w-3 h-3 ml-1"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

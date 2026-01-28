@@ -35,7 +35,7 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </a>
 
-            <div class="rounded-3xl border border-teal-100 bg-gradient-to-br from-teal-50 to-emerald-50 p-6 flex flex-col justify-between hover:border-teal-300 hover:shadow-lg transition relative overflow-hidden group">
+            <a href="{% url 'health_page' %}" class="rounded-3xl border border-teal-100 bg-gradient-to-br from-teal-50 to-emerald-50 p-6 flex flex-col justify-between hover:border-teal-300 hover:shadow-lg transition relative overflow-hidden group">
                 <div class="relative z-10">
                     <div class="flex items-center gap-2 mb-3">
                         <div class="p-2 bg-white rounded-lg text-teal-600 shadow-sm"><i data-lucide="heart-pulse" class="w-5 h-5"></i></div>
@@ -45,31 +45,31 @@
                     <p class="text-xs text-gray-600 leading-relaxed line-clamp-3">{{ health_tip.content }}</p>
                 </div>
                 
-                <button class="relative z-10 mt-4 w-full bg-white text-teal-700 text-xs font-bold py-2.5 rounded-xl shadow-sm hover:bg-teal-600 hover:text-white hover:shadow-md transition flex items-center justify-center gap-2">
-                    <i data-lucide="play-circle" class="w-4 h-4"></i> Tập Yoga ghế 2 phút
-                </button>
+                <div href="{% url 'health_page' %}" class="relative z-10 mt-4 w-full bg-white text-teal-700 text-xs font-bold py-2.5 rounded-xl shadow-sm hover:bg-teal-600 hover:text-white hover:shadow-md transition flex items-center justify-center gap-2 group-hover:scale-[1.02]">
+                    <i data-lucide="play-circle" class="w-4 h-4"></i> Vào trạm hồi sức
+                </div>
                 
                 <i data-lucide="activity" class="absolute top-4 right-4 w-20 h-20 text-teal-200 opacity-40 group-hover:scale-110 transition"></i>
-            </div>
+            </a>        
         </div>
 
         <section class="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm hover:border-blue-200 transition relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full blur-3xl -z-10 opacity-50"></div>
-            
             <div class="flex justify-between items-center mb-5">
                 <div class="flex items-center gap-3">
                     <div class="p-2 bg-blue-50 rounded-xl text-blue-600 border border-blue-100"><i data-lucide="briefcase-medical" class="w-5 h-5"></i></div>
                     <div>
                         <h2 class="text-lg font-bold text-gray-800">Hộp Cứu Thương</h2>
-                        <p class="text-xs text-gray-400">Công cụ chữa cháy văn phòng</p>
+                        <p class="text-xs text-gray-400">Công cụ hỗ trợ nhanh</p>
                     </div>
                 </div>
-                <a href="#" class="text-xs font-bold text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition">Xem tất cả</a>
+                <a href="{% url 'tool_page' %}" class="text-xs font-bold text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition flex items-center gap-1">
+                    Xem tất cả (12) <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </a>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {% for tool in office_tools %}
-                <a href="#" class="flex flex-col items-center text-center p-3 rounded-2xl bg-gray-50 hover:bg-white hover:text-blue-700 transition group border border-transparent hover:border-blue-200 hover:shadow-md">
+                <a href="{% url 'tool_page' %}" class="flex flex-col items-center text-center p-3 rounded-2xl bg-gray-50 hover:bg-white transition group border border-transparent hover:border-blue-200 hover:shadow-md">
                     <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm mb-2 group-hover:scale-110 transition">
                         <i data-lucide="{{ tool.icon }}" class="w-5 h-5 text-gray-500 group-hover:text-blue-600"></i>
                     </div>
@@ -132,6 +132,48 @@
                 {% endfor %}
             </div>
         </section>
+        <section class="mt-8">
+            <div class="flex items-center justify-between mb-6 px-1">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-pink-50 rounded-2xl text-pink-600 border border-pink-100 shadow-sm">
+                        <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-slate-800 tracking-tight">Góc Decor Văn Phòng</h2>
+                        <p class="text-xs text-slate-400">Gợi ý đồ xinh cho góc làm việc</p>
+                    </div>
+                </div>
+                <a href="{% url 'shop_page' %}" class="text-xs font-bold text-pink-600 hover:underline flex items-center gap-1">
+                    Xem tất cả <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {% for item in decor_items %}
+                <div class="group flex flex-col cursor-pointer" onclick="window.open('{{ item.affiliate_url }}', '_blank')">
+                    <div class="aspect-[4/5] relative overflow-hidden rounded-[2rem] bg-slate-100 mb-3 shadow-sm group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-500">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-slate-300">
+                                <i data-lucide="image" class="w-10 h-10"></i>
+                            </div>
+                        {% endif %}
+
+                        {% if item.is_hot %}
+                        <div class="absolute top-3 left-3">
+                            <span class="bg-orange-500 text-white text-[8px] font-black px-2 py-1 rounded-lg shadow-lg uppercase">Must Have</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="px-1 text-center md:text-left">
+                        <h3 class="text-[13px] font-bold text-slate-700 line-clamp-1 group-hover:text-pink-600 transition">{{ item.name }}</h3>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
 
     </div>
 
@@ -188,35 +230,9 @@
 
         <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl border border-orange-100 p-6 relative overflow-hidden">
             <i data-lucide="quote" class="w-10 h-10 text-orange-200 absolute top-4 left-4"></i>
-            <p class="text-sm text-gray-700 font-medium italic relative z-10 text-center mt-4">
-                "Đừng bao giờ để đến ngày mai những việc bạn có thể... nhờ đồng nghiệp làm hộ hôm nay."
-            </p>
-            <p class="text-xs text-orange-400 font-bold text-center mt-2">- Sếp ẩn danh -</p>
+            <p class="text-sm text-gray-700 font-medium italic relative z-10 text-center mt-4">"{{ daily_quote.content }}"</p>
+            <p class="text-xs text-orange-400 font-bold text-center mt-2">"{{ daily_quote.author }}"</p>
         </div>
-
-        <section>
-            <div class="flex items-center justify-between mb-4 px-1">
-                <div class="flex items-center gap-2">
-                    <div class="p-1.5 bg-pink-100 rounded-lg text-pink-600"><i data-lucide="shopping-bag" class="w-4 h-4"></i></div>
-                    <h2 class="text-lg font-bold text-gray-800">Góc Decor</h2>
-                </div>
-                <a href="#" class="text-[10px] text-gray-400 hover:text-pink-600 font-bold uppercase">Xem thêm</a>
-            </div>
-            
-            <div class="space-y-4">
-                {% for item in decor_items %}
-                <div class="group relative rounded-2xl overflow-hidden shadow-sm aspect-[16/9] cursor-pointer ring-1 ring-gray-100">
-                    <img src="{{ item.image }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4">
-                        <h3 class="text-white font-bold text-sm translate-y-2 group-hover:translate-y-0 transition leading-tight">{{ item.name }}</h3>
-                        <div class="h-0 group-hover:h-6 transition-all duration-300 overflow-hidden">
-                             <span class="text-[10px] text-pink-300 font-bold mt-1 block">Click xem giá &rarr;</span>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </section>
 
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="p-4 border-b border-gray-50 bg-gray-50/50">

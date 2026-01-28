@@ -120,6 +120,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'core/static')]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -128,5 +131,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'            # Nếu chưa đăng nhập, chuyển hướng về /login/ thay vì /accounts/login/
 LOGIN_REDIRECT_URL = 'home'    # Đăng nhập xong thì về Trang chủ
 LOGOUT_REDIRECT_URL = 'login'  # Đăng xuất xong thì quay lại trang login
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+X_FRAME_OPTIONS = 'SAMEORIGIN'

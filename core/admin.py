@@ -3,9 +3,9 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils.html import format_html
 from .models import (
-    UserProfile, PointHistory, RewardItem, 
+    DailyQuote, UserProfile, PointHistory, RewardItem, 
     DocumentResource, FoodReview, Confession, Comment, 
-    Product, ZoneConfig
+    Product
 )
 from .models import PostReport # Import thêm model này
 
@@ -128,29 +128,18 @@ class ConfessionAdmin(admin.ModelAdmin):
     reject_confessions.short_description = "Từ chối các bài đã chọn"
 
 # --- 6. ZONE 4: SHOPPING ---
-
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'price_vnd', 'platform', 'image_preview')
-    list_filter = ('platform',)
+    # Thay 'title' bằng 'name' (theo đúng model)
+    # Đảm bảo 'platform' có tồn tại trong model
+    list_display = ('name', 'category', 'platform', 'price_display', 'is_hot') 
     
-    def price_vnd(self, obj):
-        return f"{obj.price:,.0f} đ"
-    price_vnd.short_description = 'Giá bán'
-
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" style="width: 50px; height: 50px; object-fit: cover;" />', obj.image.url)
-        return "-"
-    image_preview.short_description = 'Ảnh'
-
+    # Đảm bảo 'platform' có trong model để filter
+    list_filter = ('platform', 'category', 'is_hot') 
+    
+    search_fields = ('name', 'description')
 # --- 7. CONFIG ---
 
-@admin.register(ZoneConfig)
-class ZoneConfigAdmin(admin.ModelAdmin):
-    list_display = ('display_name', 'zone_code', 'priority_morning', 'priority_work', 'priority_lunch', 'priority_chill')
-    list_editable = ('priority_morning', 'priority_work', 'priority_lunch', 'priority_chill') # Sửa trực tiếp ở list
-    ordering = ('display_name',)
 
 @admin.register(PostReport)
 class PostReportAdmin(admin.ModelAdmin):
@@ -159,3 +148,9 @@ class PostReportAdmin(admin.ModelAdmin):
     
     def post_link(self, obj):
         return f"Bài #{obj.post.id}: {obj.post.content[:30]}..."
+
+@admin.register(DailyQuote)
+class DailyQuoteAdmin(admin.ModelAdmin):
+    list_display = ('content', 'time_category', 'author', 'is_active')
+    list_filter = ('time_category', 'is_active')
+    list_editable = ('is_active',)

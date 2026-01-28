@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-6xl mx-auto py-4 px-5">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for tool in all_tools %}
+        <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
+            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                <i data-lucide="{{ tool.icon }}" class="w-7 h-7"></i>
+            </div>
+            <h3 class="font-bold text-gray-800 text-lg mb-1">{{ tool.name }}</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">{{ tool.desc }}</p>
+            <div class="mt-4 flex items-center text-blue-600 font-bold text-xs opacity-0 group-hover:opacity-100 transition">
+                Mở công cụ <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
