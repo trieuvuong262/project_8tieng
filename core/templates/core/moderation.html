@@ -404,7 +404,85 @@
         </div>
         {% endif %}
 
+        <div id="add-res-modal"
+            class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+            <div class="bg-white rounded-2xl w-[95%] md:w-full max-w-lg shadow-2xl p-0 overflow-hidden animate-fade-in-down">
+
+                <div class="bg-orange-600 p-4 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="store" class="w-5 h-5"></i> Thêm Quán Ăn Mới
+                    </h3>
+                    <button onclick="document.getElementById('add-res-modal').classList.add('hidden')"
+                        class="text-orange-200 hover:text-white transition p-1">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_restaurant">
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên quán ăn <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="res_name" placeholder="Ví dụ: Cơm Tấm Sài Gòn"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none"
+                            required>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Địa chỉ <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="res_address" placeholder="Ví dụ: 123 Nguyễn Văn Linh..."
+                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none"
+                            required>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Loại hình</label>
+                            <select name="res_category"
+                                class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none">
+                                <option value="Cơm trưa">Cơm trưa</option>
+                                <option value="Đồ nước">Đồ nước (Phở/Bún)</option>
+                                <option value="Ăn vặt">Ăn vặt</option>
+                                <option value="Trà sữa/Cafe">Trà sữa/Cafe</option>
+                                <option value="Nhậu nhẹt">Nhậu nhẹt</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Link App (Optional)</label>
+                            <input type="url" name="res_url" placeholder="ShopeeFood/Grab..."
+                                class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Ảnh đại diện</label>
+                        <label
+                            class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-orange-50 hover:border-orange-300 transition">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <i data-lucide="cloud-upload" class="w-8 h-8 text-gray-400 mb-2"></i>
+                                <p class="text-xs text-gray-500">Click để tải ảnh lên (JPG, PNG)</p>
+                            </div>
+                            <input type="file" name="res_image" class="hidden" accept="image/*"
+                                onchange="previewImage(this)">
+                        </label>
+                        <p id="file-name" class="text-xs text-center text-orange-600 mt-2 font-bold"></p>
+                    </div>
+
+                    <div class="pt-4 mt-2">
+                        <button type="submit"
+                            class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 shadow-lg shadow-orange-200 transition">
+                            Lưu Quán Mới
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
+
     {% elif current_tab == 'shop' %}
     <div class="space-y-6">
         <div
@@ -473,10 +551,74 @@
             </div>
             {% endfor %}
         </div>
-    </div>
+        
+        <div id="add-product-modal"
+            class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+            <div class="bg-white rounded-2xl w-[95%] md:w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-down">
+                <div class="bg-pink-600 p-4 flex justify-between items-center text-white">
+                    <h3 class="text-lg font-bold flex items-center gap-2"><i data-lucide="package-plus" class="w-5 h-5"></i>
+                        Đăng sản phẩm mới</h3>
+                    <button onclick="document.getElementById('add-product-modal').classList.add('hidden')"
+                        class="hover:rotate-90 transition duration-300 p-1">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <form method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_product">
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên vật phẩm <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="p_name"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500"
+                            required>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Giá (KPI Points) <span
+                                    class="text-red-500">*</span></label>
+                            <input type="number" name="p_price"
+                                class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Danh mục</label>
+                            <select name="p_category"
+                                class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500">
+                                <option value="Cây xanh">Cây xanh</option>
+                                <option value="Đèn bàn">Đèn bàn</option>
+                                <option value="Phụ kiện">Phụ kiện</option>
+                                <option value="Tượng/Mô hình">Tượng/Mô hình</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Hình ảnh sản phẩm</label>
+                        <div
+                            class="relative group h-32 w-full border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center bg-gray-50 hover:bg-pink-50 transition cursor-pointer overflow-hidden">
+                            <input type="file" name="p_image" class="absolute inset-0 opacity-0 cursor-pointer"
+                                onchange="previewProductImage(this)">
+                            <div id="product-preview-zone" class="text-center">
+                                <i data-lucide="upload-cloud" class="w-8 h-8 text-gray-400 mx-auto mb-1"></i>
+                                <p class="text-[10px] text-gray-500">JPG, PNG (Tỷ lệ 1:1 là tốt nhất)</p>
+                            </div>
+                            <img id="product-img-preview" class="hidden absolute inset-0 w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-pink-600 text-white font-bold py-3 rounded-xl hover:bg-pink-700 shadow-lg shadow-pink-100 transition-all">
+                        Lưu sản phẩm
+                    </button>
+                </form>
+            </div>
         </div>
-    {% endif %}
-    {% if current_tab == 'quote' %}
+
+    </div>
+    {% elif current_tab == 'quote' %}
     <div class="space-y-6 animate-fade-in">
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="bg-orange-500 p-4">
@@ -565,187 +707,46 @@
             </div>
         </div>
 
-<div id="add-quote-modal" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl w-[95%] md:w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-down">
-        <div class="bg-orange-600 p-4 flex justify-between items-center text-white">
-            <h3 class="text-lg font-bold flex items-center gap-2"><i data-lucide="plus-circle" class="w-5 h-5"></i> Thêm Quote Mới</h3>
-            <button onclick="document.getElementById('add-quote-modal').classList.add('hidden')" class="hover:rotate-90 transition duration-300 p-1">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-        </div>
-        <form method="POST" class="p-6 space-y-4">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="add_quote">
-            
-            <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nội dung câu nói <span class="text-red-500">*</span></label>
-                <textarea name="content" rows="3" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500" required placeholder="VD: Đừng bao giờ để đến ngày mai..."></textarea>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tác giả</label>
-                    <input type="text" name="author" value="Sếp ẩn danh" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Xuất hiện vào buổi</label>
-                    <select name="time_category" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500">
-                        <option value="morning">Buổi Sáng</option>
-                        <option value="work">Giờ Làm Việc</option>
-                        <option value="lunch">Buổi Trưa</option>
-                        <option value="chill">Cuối Ngày/Tối</option>
-                    </select>
-                </div>
-            </div>
-
-            <button type="submit" class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 shadow-lg shadow-orange-100 transition-all">
-                Lưu Câu Nói
-            </button>
-        </form>
-    </div>
-</div>
-    <div id="add-product-modal"
-        class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-2xl w-[95%] md:w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-down">
-            <div class="bg-pink-600 p-4 flex justify-between items-center text-white">
-                <h3 class="text-lg font-bold flex items-center gap-2"><i data-lucide="package-plus" class="w-5 h-5"></i>
-                    Đăng sản phẩm mới</h3>
-                <button onclick="document.getElementById('add-product-modal').classList.add('hidden')"
-                    class="hover:rotate-90 transition duration-300 p-1">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <form method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="add_product">
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên vật phẩm <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" name="p_name"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500"
-                        required>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Giá (KPI Points) <span
-                                class="text-red-500">*</span></label>
-                        <input type="number" name="p_price"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500"
-                            required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Danh mục</label>
-                        <select name="p_category"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500">
-                            <option value="Cây xanh">Cây xanh</option>
-                            <option value="Đèn bàn">Đèn bàn</option>
-                            <option value="Phụ kiện">Phụ kiện</option>
-                            <option value="Tượng/Mô hình">Tượng/Mô hình</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Hình ảnh sản phẩm</label>
-                    <div
-                        class="relative group h-32 w-full border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center bg-gray-50 hover:bg-pink-50 transition cursor-pointer overflow-hidden">
-                        <input type="file" name="p_image" class="absolute inset-0 opacity-0 cursor-pointer"
-                            onchange="previewProductImage(this)">
-                        <div id="product-preview-zone" class="text-center">
-                            <i data-lucide="upload-cloud" class="w-8 h-8 text-gray-400 mx-auto mb-1"></i>
-                            <p class="text-[10px] text-gray-500">JPG, PNG (Tỷ lệ 1:1 là tốt nhất)</p>
-                        </div>
-                        <img id="product-img-preview" class="hidden absolute inset-0 w-full h-full object-cover">
-                    </div>
-                </div>
-
-                <button type="submit"
-                    class="w-full bg-pink-600 text-white font-bold py-3 rounded-xl hover:bg-pink-700 shadow-lg shadow-pink-100 transition-all">
-                    Lưu sản phẩm
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <div id="add-res-modal"
-        class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-2xl w-[95%] md:w-full max-w-lg shadow-2xl p-0 overflow-hidden animate-fade-in-down">
-
-            <div class="bg-orange-600 p-4 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="store" class="w-5 h-5"></i> Thêm Quán Ăn Mới
-                </h3>
-                <button onclick="document.getElementById('add-res-modal').classList.add('hidden')"
-                    class="text-orange-200 hover:text-white transition p-1">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-
-            <form method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="add_restaurant">
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên quán ăn <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" name="res_name" placeholder="Ví dụ: Cơm Tấm Sài Gòn"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none"
-                        required>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Địa chỉ <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" name="res_address" placeholder="Ví dụ: 123 Nguyễn Văn Linh..."
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none"
-                        required>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Loại hình</label>
-                        <select name="res_category"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none">
-                            <option value="Cơm trưa">Cơm trưa</option>
-                            <option value="Đồ nước">Đồ nước (Phở/Bún)</option>
-                            <option value="Ăn vặt">Ăn vặt</option>
-                            <option value="Trà sữa/Cafe">Trà sữa/Cafe</option>
-                            <option value="Nhậu nhẹt">Nhậu nhẹt</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Link App (Optional)</label>
-                        <input type="url" name="res_url" placeholder="ShopeeFood/Grab..."
-                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-500 outline-none">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Ảnh đại diện</label>
-                    <label
-                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-orange-50 hover:border-orange-300 transition">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <i data-lucide="cloud-upload" class="w-8 h-8 text-gray-400 mb-2"></i>
-                            <p class="text-xs text-gray-500">Click để tải ảnh lên (JPG, PNG)</p>
-                        </div>
-                        <input type="file" name="res_image" class="hidden" accept="image/*"
-                            onchange="previewImage(this)">
-                    </label>
-                    <p id="file-name" class="text-xs text-center text-orange-600 mt-2 font-bold"></p>
-                </div>
-
-                <div class="pt-4 mt-2">
-                    <button type="submit"
-                        class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 shadow-lg shadow-orange-200 transition">
-                        Lưu Quán Mới
+        <div id="add-quote-modal" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl w-[95%] md:w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-down">
+                <div class="bg-orange-600 p-4 flex justify-between items-center text-white">
+                    <h3 class="text-lg font-bold flex items-center gap-2"><i data-lucide="plus-circle" class="w-5 h-5"></i> Thêm Quote Mới</h3>
+                    <button onclick="document.getElementById('add-quote-modal').classList.add('hidden')" class="hover:rotate-90 transition duration-300 p-1">
+                        <i data-lucide="x" class="w-6 h-6"></i>
                     </button>
                 </div>
-            </form>
+                <form method="POST" class="p-6 space-y-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_quote">
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nội dung câu nói <span class="text-red-500">*</span></label>
+                        <textarea name="content" rows="3" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500" required placeholder="VD: Đừng bao giờ để đến ngày mai..."></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tác giả</label>
+                            <input type="text" name="author" value="Sếp ẩn danh" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Xuất hiện vào buổi</label>
+                            <select name="time_category" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500">
+                                <option value="morning">Buổi Sáng</option>
+                                <option value="work">Giờ Làm Việc</option>
+                                <option value="lunch">Buổi Trưa</option>
+                                <option value="chill">Cuối Ngày/Tối</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 shadow-lg shadow-orange-100 transition-all">
+                        Lưu Câu Nói
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-
 
 
     {% else %}
