@@ -2,16 +2,13 @@ import io
 import os
 import tempfile
 # ĐÃ XÓA: import pythoncom (Vì Linux không chạy được cái này)
-
+from spire.doc import Document, FileFormat
 from django.shortcuts import render
 from django.http import FileResponse
 
 # --- THƯ VIỆN XỬ LÝ ---
 from pdf2docx import Converter  # Cho PDF -> Word
-import mammoth                  # Cho Word -> HTML
-from xhtml2pdf import pisa      # Cho HTML -> PDF
 
-# --- FORM ---
 from core.forms import PdfToWordForm, WordToPdfForm
 
 # ==========================================
@@ -93,49 +90,51 @@ def tool_convert_unified(request):
         # -------------------------------------
         # CASE B: WORD SANG PDF (Dùng Mammoth + Xhtml2pdf cho Linux)
         # -------------------------------------
-        elif 'submit_word_to_pdf' in request.POST:
+    elif 'submit_word_to_pdf' in request.POST:
             active_tab = 'word-to-pdf'
             form_word = WordToPdfForm(request.POST, request.FILES)
             
             if form_word.is_valid():
+                temp_docx_path = ""
+                temp_pdf_path = ""
                 try:
                     word_file = request.FILES['file']
                     
-                    # B1: Đọc file Word -> Chuyển thành HTML
-                    result = mammoth.convert_to_html(word_file)
-                    html_content = result.value
+                    # 1. Tạo file tạm để Spire đọc
+                    with tempfile.NamedTemporaryFile(delete=False, suffix='.docx') as temp_docx:
+                        for chunk in word_file.chunks():
+                            temp_docx.write(chunk)
+                        temp_docx_path = temp_docx.name
                     
-                    # B2: Thêm CSS cơ bản
-                    full_html = f"""
-                    <html>
-                    <head>
-                        <style>
-                            @page {{ size: A4; margin: 2cm; }}
-                            body {{ font-family: sans-serif; font-size: 12pt; line-height: 1.5; }}
-                            p {{ margin-bottom: 10px; }}
-                            table {{ border-collapse: collapse; width: 100%; }}
-                            td, th {{ border: 1px solid black; padding: 5px; }}
-                        </style>
-                    </head>
-                    <body>
-                        {html_content}
-                    </body>
-                    </html>
-                    """
+                    temp_pdf_path = temp_docx_path.replace('.docx', '.pdf')
+                    
+                    # 2. Xử lý chuyển đổi bằng Spire.Doc
+                    # Create a Document object
+                    document = Document()
+                    # Load the Word document
+                    document.LoadFromFile(temp_docx_path)
+                    # Save to PDF
+                    document.SaveToFile(temp_pdf_path, FileFormat.PDF)
+                    document.Close()
 
-                    # B3: Chuyển HTML -> PDF
-                    pdf_buffer = io.BytesIO()
-                    pisa_status = pisa.CreatePDF(io.BytesIO(full_html.encode("utf-8")), dest=pdf_buffer)
+                    # 3. Trả file về cho người dùng
+                    return_buffer = io.BytesIO()
+                    with open(temp_pdf_path, 'rb') as f:
+                        return_buffer.write(f.read())
+                    return_buffer.seek(0)
 
-                    if pisa_status.err:
-                        form_word.add_error(None, "Lỗi khi tạo PDF từ nội dung Word.")
-                    else:
-                        pdf_buffer.seek(0)
-                        original_name = word_file.name.rsplit('.', 1)[0]
-                        return FileResponse(pdf_buffer, as_attachment=True, filename=f"{original_name}_converted.pdf")
+                    # Dọn dẹp
+                    os.remove(temp_docx_path)
+                    os.remove(temp_pdf_path)
+
+                    original_name = word_file.name.rsplit('.', 1)[0]
+                    return FileResponse(return_buffer, as_attachment=True, filename=f"{original_name}_converted.pdf")
 
                 except Exception as e:
-                    form_word.add_error(None, f"Lỗi xử lý: {str(e)}")
+                    # Dọn dẹp nếu lỗi
+                    if os.path.exists(temp_docx_path): os.remove(temp_docx_path)
+                    if os.path.exists(temp_pdf_path): os.remove(temp_pdf_path)
+                    form_word.add_error(None, f"Lỗi chuyển đổi: {str(e)}")
 
     context = {
         'form_pdf': form_pdf,
