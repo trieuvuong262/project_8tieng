@@ -87,7 +87,7 @@ def dashboard(request):
     if quotes.exists():
         daily_quote = random.choice(list(quotes))
     else:
-        # Nếu chưa có quote cho buổi này, lấy câu mặc định
+
         daily_quote = {
             "content": "Chúc bạn một ngày làm việc hiệu quả và tràn đầy năng lượng!",
             "author": "Hệ thống",
@@ -178,10 +178,10 @@ def dashboard(request):
     )[:3]
 
     context = {
-        "time_mode": time_mode,  # Thêm cái này
-        "greeting_title": greeting_title,  # Thêm cái này
-        "greeting_sub": greeting_sub,  # Thêm cái này
-        "daily_quote": daily_quote,  # CỰC KỲ QUAN TRỌNG: Thêm cái này
+        "time_mode": time_mode,
+        "greeting_title": greeting_title,
+        "greeting_sub": greeting_sub,
+        "daily_quote": daily_quote,
         "widget_template": widget_template,
         "today_food": today_food,
         "dishes_json": dishes_json,
@@ -417,15 +417,13 @@ def moderation_dashboard(request):
     Dashboard quản trị viên trung tâm (All-in-one).
     Xử lý: Confession, Health Config, Pantry, Quote.
     """
-    # Lấy tham số điều hướng
+
     current_tab = request.GET.get("tab", "confession")
     current_filter = request.GET.get("filter", "pending")
 
-    # --- PHẦN 1: XỬ LÝ POST (HÀNH ĐỘNG CỦA ADMIN) ---
     if request.method == "POST":
         action = request.POST.get("action")
 
-        # 1.1 NHÓM CONFESSION & NOTIFICATION
         if action == "approve":
             post = get_object_or_404(Confession, id=request.POST.get("post_id"))
             post.status = "APPROVED"
@@ -472,7 +470,6 @@ def moderation_dashboard(request):
                 except User.DoesNotExist:
                     messages.error(request, "Không tìm thấy user.")
 
-        # 1.2 NHÓM QUOTE (TÁCH RIÊNG RA KHỎI NOTI)
         elif action == "add_quote":
             content = request.POST.get("content")
             author = request.POST.get("author", "Sếp ẩn danh")
@@ -500,11 +497,38 @@ def moderation_dashboard(request):
             quote = get_object_or_404(DailyQuote, id=quote_id)
             quote.is_active = not quote.is_active
             quote.save()
-            # Nếu dùng link chuyển hướng bình thường thay vì AJAX
+
             messages.success(request, "🔄 Đã cập nhật trạng thái quote.")
             return redirect(f"{request.path}?tab=quote")
+        
+        elif action == "add_product":
+            try:
+                # Lấy dữ liệu từ form HTML
+                p_name = request.POST.get("p_name")
+                p_price_text = request.POST.get("p_price_text") # Giá dạng chữ (VD: 200k)
+                p_link = request.POST.get("p_link")             # Link Affiliate
+                p_category = request.POST.get("p_category")
+                p_image = request.FILES.get("p_image")
 
-        # 1.3 NHÓM RELAX & PANTRY (Giữ nguyên logic của bạn nhưng sửa thụt lề)
+                # Kiểm tra dữ liệu bắt buộc
+                if p_name and p_link and p_image:
+                    Product.objects.create(
+                        name=p_name,
+                        price_display=p_price_text, # Lưu giá text
+                        affiliate_url=p_link,       # Lưu link
+                        category=p_category,
+                        image=p_image,
+                        is_active=True
+                    )
+                    messages.success(request, f"Đã đăng sản phẩm '{p_name}' thành công!")
+                else:
+                    messages.error(request, "Thiếu tên, link sản phẩm hoặc ảnh!")
+            
+            except Exception as e:
+                messages.error(request, f"Lỗi hệ thống: {str(e)}")
+            
+            return redirect(f"{request.path}?tab=shop")
+
         elif action == "update_health_config":
             codes = ["yoga", "wrist", "meditation", "music", "back"]
             for code in codes:
@@ -537,16 +561,15 @@ def moderation_dashboard(request):
                 messages.error(request, f"Lỗi: {str(e)}")
             return redirect(f"{request.path}?tab=pantry")
 
-        # Mặc định sau khi xử lý xong Post cho Confession
         if current_tab == "confession":
             return redirect(f"{request.path}?tab=confession&filter={current_filter}")
 
-    # --- PHẦN 2: CHUẨN BỊ DỮ LIỆU HIỂN THỊ (GET) ---
     posts = []
     reports = []
     health_configs = {}
     pantry_restaurants = []
     all_quotes = []
+    products = []
 
     if current_tab == "confession":
         if current_filter == "approved":
@@ -579,6 +602,9 @@ def moderation_dashboard(request):
 
     elif current_tab == "quote":
         all_quotes = DailyQuote.objects.all().order_by("-id")
+        
+    elif current_tab == "shop":
+        products = Product.objects.all().order_by("-created_at")
 
     stats = {
         "pending": Confession.objects.filter(status="PENDING").count(),
@@ -595,6 +621,7 @@ def moderation_dashboard(request):
         "pantry_restaurants": pantry_restaurants,
         "all_quotes": all_quotes,
         "stats": stats,
+        "products": products,
     }
 
     return render(request, "core/moderation.html", context)
@@ -842,13 +869,11 @@ def lunch_page(request):
 
 
 def health_page(request):
-    # 1. Lấy danh sách bài tập từ DB
+
     exercises_db = HealthExercise.objects.all()
 
-    # Chuyển thành Dictionary để dễ dùng: {'yoga': <Object>, 'wrist': <Object>...}
     exercises = {ex.code: ex for ex in exercises_db}
 
-    # 2. Dữ liệu mặc định (Nếu DB chưa có bài đó)
     default_data = {
         "yoga": "s-7lyvblFNI",
         "wrist": "QZjkZa4NxNg",
@@ -856,7 +881,6 @@ def health_page(request):
         "music": "jfKfPfyJRdk",
     }
 
-    # 3. Danh sách câu nói truyền cảm hứng
     quotes = [
         "Hít vào tâm tĩnh lặng, thở ra miệng mỉm cười.",
         "Công việc là quả bóng cao su, sức khỏe là quả bóng thủy tinh.",
@@ -874,22 +898,19 @@ def health_page(request):
 
 @login_required
 def shop_page(request):
-    # 1. Lấy danh sách sản phẩm (Có thể phân loại theo danh mục)
+
     products = Product.objects.filter(is_active=True).order_by("-created_at")
 
-    # 2. Xử lý logic Đổi quà bằng điểm KPI
     if request.method == "POST" and "redeem_product" in request.POST:
         product_id = request.POST.get("product_id")
         product = get_object_or_404(Product, id=product_id)
         user_profile = request.user.profile
 
-        # Kiểm tra xem đủ điểm không
         if user_profile.total_kpi_points >= product.price:
-            # Trừ điểm và tạo lịch sử (PointHistory)
+
             user_profile.total_kpi_points -= product.price
             user_profile.save()
 
-            # Gửi thông báo cho Admin hoặc User
             messages.success(
                 request,
                 f"Chúc mừng! Bạn đã đổi thành công {product.name}. Admin sẽ liên hệ giao quà nhé!",

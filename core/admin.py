@@ -132,13 +132,11 @@ class ConfessionAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     # Thay 'title' bằng 'name' (theo đúng model)
     # Đảm bảo 'platform' có tồn tại trong model
-    list_display = ('name', 'category', 'platform', 'price_display', 'is_hot') 
+    list_display = ('name', 'category', 'price_display', 'affiliate_url','is_hot') 
     
     # Đảm bảo 'platform' có trong model để filter
-    list_filter = ('platform', 'category', 'is_hot') 
-    
-    search_fields = ('name', 'description')
-# --- 7. CONFIG ---
+    list_filter = ('category', 'name','is_hot') 
+    # --- 7. CONFIG ---
 
 
 @admin.register(PostReport)

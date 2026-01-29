@@ -3,17 +3,6 @@
 {% block content %}
 <div class="max-w-7xl mx-auto pb-20 relative">
 
-    <div
-        class="bg-indigo-900 text-white p-4 md:p-6 rounded-2xl shadow-lg mb-4 md:mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-            <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
-                <i data-lucide="shield-alert" class="w-6 h-6 md:w-8 md:h-8 text-yellow-400"></i>
-                Trung tâm Kiểm duyệt
-            </h1>
-            <p class="text-indigo-200 text-sm mt-1 md:mt-0">Công cụ quản trị hệ thống.</p>
-        </div>
-    </div>
-
     <div class="flex gap-2 mb-6 overflow-x-auto pb-2 custom-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
         <a href="?tab=confession"
             class="px-4 md:px-6 py-2 md:py-3 rounded-xl font-bold transition flex items-center gap-2 whitespace-nowrap text-sm md:text-base flex-shrink-0
@@ -534,7 +523,7 @@
                     </div>
                     <div class="mt-3 flex items-center gap-2">
                         <span class="text-[10px] font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded-md">{{
-                            item.category }}</span>
+                            product.category }}</span>
                         {% if item.is_active %}
                         <span class="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-1 rounded-md">Đang
                             bán</span>
@@ -566,20 +555,16 @@
                     <input type="hidden" name="action" value="add_product">
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên vật phẩm <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" name="p_name"
-                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500"
-                            required>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tên vật phẩm <span class="text-red-500">*</span></label>
+                        <input type="text" name="p_name" required
+                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Giá (KPI Points) <span
-                                    class="text-red-500">*</span></label>
-                            <input type="number" name="p_price"
-                                class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500"
-                                required>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Giá bán (VNĐ)</label>
+                            <input type="text" name="p_price_text" placeholder="VD: 159.000đ"
+                                class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Danh mục</label>
@@ -594,22 +579,25 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Hình ảnh sản phẩm</label>
-                        <div
-                            class="relative group h-32 w-full border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center bg-gray-50 hover:bg-pink-50 transition cursor-pointer overflow-hidden">
-                            <input type="file" name="p_image" class="absolute inset-0 opacity-0 cursor-pointer"
-                                onchange="previewProductImage(this)">
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Link Shopee/Lazada <span class="text-red-500">*</span></label>
+                        <input type="url" name="p_link" required placeholder="https://shopee.vn/..."
+                            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-pink-500 text-blue-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Hình ảnh</label>
+                        <div class="relative group h-32 w-full border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center bg-gray-50 hover:bg-pink-50 transition cursor-pointer overflow-hidden">
+                            <input type="file" name="p_image" class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewProductImage(this)">
                             <div id="product-preview-zone" class="text-center">
                                 <i data-lucide="upload-cloud" class="w-8 h-8 text-gray-400 mx-auto mb-1"></i>
-                                <p class="text-[10px] text-gray-500">JPG, PNG (Tỷ lệ 1:1 là tốt nhất)</p>
+                                <p class="text-[10px] text-gray-500">Click tải ảnh</p>
                             </div>
                             <img id="product-img-preview" class="hidden absolute inset-0 w-full h-full object-cover">
                         </div>
                     </div>
 
-                    <button type="submit"
-                        class="w-full bg-pink-600 text-white font-bold py-3 rounded-xl hover:bg-pink-700 shadow-lg shadow-pink-100 transition-all">
-                        Lưu sản phẩm
+                    <button type="submit" class="w-full bg-pink-600 text-white font-bold py-3 rounded-xl hover:bg-pink-700 shadow-lg shadow-pink-100 transition-all">
+                        Đăng sản phẩm Affiliate
                     </button>
                 </form>
             </div>
