@@ -18,15 +18,14 @@ jobs:
           # 1. Đi đến thư mục dự án
           cd /home/trieuvuong1997/project_8tieng
 
-          # 2. Lấy code mới nhất về
-          git pull origin main
+          git fetch --all
+          git reset --hard origin/main
+          # Lệnh reset --hard sẽ ép server giống hệt code trên GitHub, xóa bỏ các xung đột
 
-          # 3. Cập nhật thư viện (Dùng --user vì không có virtualenv)
-          # Lưu ý: Nếu không có file requirements.txt thì có thể bỏ dòng này
+          # 3. Cập nhật thư viện
           pip install --user -r requirements.txt
 
-          # 4. Chạy lệnh Django cần thiết
-          # (Dùng python3 để chắc chắn chạy đúng phiên bản)
+          # 4. Chạy lệnh Django
           python3 manage.py migrate
           python3 manage.py collectstatic --noinput
 
