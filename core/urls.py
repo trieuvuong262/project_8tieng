@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from core import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -20,5 +20,6 @@ urlpatterns = [
     path('relax/', views.health_page, name='health_page'),
     path('tool_page/', views.tool_page, name='tool_page'),
     path('shop_page/', views.shop_page, name='shop_page'),
-
+    
+    path('tools/convert-document/', views.tool_convert_unified, name='tool_convert_unified'),
 ]
