@@ -3,30 +3,58 @@
 {% block content %}
 <style>
     /* Ép toàn bộ giao diện vào 1 màn hình */
-    body { overflow: hidden; }
-    :root { --primary-color: #0d9488; }
-    
-    .tab-active { 
-        background: #f0fdfa !important; 
-        color: var(--primary-color) !important; 
+    body {
+        overflow: hidden;
+    }
+
+    :root {
+        --primary-color: #0d9488;
+    }
+
+    .tab-active {
+        background: #f0fdfa !important;
+        color: var(--primary-color) !important;
         border-right: 4px solid var(--primary-color);
         box-shadow: none !important;
     }
 
-    .video-overlay { background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); transition: all 0.5s; }
+    .video-overlay {
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(4px);
+        transition: all 0.5s;
+    }
 
     /* Animation cho các Tab */
-    .tab-pane { animation: fadeIn 0.3s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-pane {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
     /* Custom scrollbar nếu menu quá dài */
-    .custom-scroll::-webkit-scrollbar { width: 4px; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    .custom-scroll::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+    }
 </style>
 
 <div class="h-screen bg-slate-50 flex flex-col p-4 overflow-hidden">
     <div class="flex-1 flex gap-4 overflow-hidden">
-        
+
         <aside class="w-72 flex flex-col gap-4 shrink-0 h-full">
             <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100">
                 <h1 class="text-xl font-black text-slate-800 flex items-center gap-2 mb-2">
@@ -35,58 +63,80 @@
                 <p class="text-[11px] text-slate-500 italic leading-relaxed">"{{ quote }}"</p>
             </div>
 
-            <nav class="flex-1 bg-white rounded-[2rem] shadow-sm border border-slate-100 p-3 flex flex-col gap-1 overflow-y-auto custom-scroll" id="main-nav">
+            <nav class="flex-1 bg-white rounded-[2rem] shadow-sm border border-slate-100 p-3 flex flex-col gap-1 overflow-y-auto custom-scroll"
+                id="main-nav">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest p-3">Liệu pháp nhanh</p>
-                
-                <button onclick="switchTab('yoga', '{{ exercises.yoga.youtube_id|default:defaults.yoga }}')" id="btn-yoga" class="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm group">
+
+                <button onclick="switchTab('yoga', '{{ exercises.yoga.youtube_id|default:defaults.yoga }}')"
+                    id="btn-yoga"
+                    class="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm group">
                     <div class="flex items-center gap-3">
                         <i data-lucide="accessibility" class="w-5 h-5"></i> Cổ Vai Gáy
                     </div>
-                    <span class="text-[10px] bg-teal-50 text-teal-600 px-2 py-0.5 rounded opacity-0 group-hover:opacity-100">5m</span>
+                    <span
+                        class="text-[10px] bg-teal-50 text-teal-600 px-2 py-0.5 rounded opacity-0 group-hover:opacity-100">5m</span>
                 </button>
-                <button onclick="switchTab('back', '{{ exercises.back.youtube_id|default:'5R1_Ek7L7Ek' }}')" id="btn-back" class="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm group">
+                <button onclick="switchTab('back', '{{ exercises.back.youtube_id|default:'5R1_Ek7L7Ek' }}')"
+                    id="btn-back"
+                    class="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm group">
                     <div class="flex items-center gap-3">
                         <i data-lucide="split" class="w-5 h-5"></i> Cột Sống & Thắt lưng
                     </div>
-                    <span class="text-[10px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded opacity-0 group-hover:opacity-100">7m</span>
+                    <span
+                        class="text-[10px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded opacity-0 group-hover:opacity-100">7m</span>
                 </button>
-                <button onclick="switchTab('wrist', '{{ exercises.wrist.youtube_id|default:defaults.wrist }}')" id="btn-wrist" class="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm group">
+                <button onclick="switchTab('wrist', '{{ exercises.wrist.youtube_id|default:defaults.wrist }}')"
+                    id="btn-wrist"
+                    class="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm group">
                     <div class="flex items-center gap-3">
                         <i data-lucide="hand" class="w-5 h-5"></i> Cổ Tay & Ngón tay
                     </div>
-                    <span class="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded opacity-0 group-hover:opacity-100">3m</span>
+                    <span
+                        class="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded opacity-0 group-hover:opacity-100">3m</span>
                 </button>
 
-                <button onclick="switchTab('breath', '')" id="btn-breath" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm">
+                <button onclick="switchTab('breath', '')" id="btn-breath"
+                    class="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm">
                     <i data-lucide="wind" class="w-5 h-5"></i> Hít Thở 4-4
                 </button>
 
-                <button onclick="switchTab('meditation', '{{ exercises.meditation.youtube_id|default:defaults.meditation }}')" id="btn-meditation" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm">
+                <button
+                    onclick="switchTab('meditation', '{{ exercises.meditation.youtube_id|default:defaults.meditation }}')"
+                    id="btn-meditation"
+                    class="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm">
                     <i data-lucide="flower" class="w-5 h-5"></i> Thiền Định
                 </button>
 
-                <button onclick="switchTab('music', '{{ exercises.music.youtube_id|default:defaults.music }}')" id="btn-music" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm">
+                <button onclick="switchTab('music', '{{ exercises.music.youtube_id|default:defaults.music }}')"
+                    id="btn-music"
+                    class="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm">
                     <i data-lucide="headphones" class="w-5 h-5"></i> Nhạc Tập Trung
                 </button>
 
-                <button onclick="switchTab('eye', '')" id="btn-eye" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm">
+                <button onclick="switchTab('eye', '')" id="btn-eye"
+                    class="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all font-bold text-sm">
                     <i data-lucide="eye-off" class="w-5 h-5"></i> Thư Giãn Mắt
                 </button>
 
                 <div class="mt-auto pt-4 border-t border-slate-50">
-                    <a href="{% url 'home' %}" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-red-500 font-bold text-sm transition">
+                    <a href="{% url 'home' %}"
+                        class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-red-500 font-bold text-sm transition">
                         <i data-lucide="log-out" class="w-5 h-5"></i> Thoát
                     </a>
                 </div>
             </nav>
         </aside>
 
-        <main class="flex-1 bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden flex flex-col">
-            
+        <main
+            class="flex-1 bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden flex flex-col">
+
             <div id="video-wrapper" class="relative w-full bg-black hidden shrink-0" style="height: 50%;">
-                <iframe id="youtube-player" class="w-full h-full" src="" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                
-                <div id="video-overlay" class="absolute inset-0 video-overlay opacity-0 pointer-events-none flex items-center justify-center">
+                <iframe id="youtube-player" class="w-full h-full" src="" frameborder="0"
+                    allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen></iframe>
+
+                <div id="video-overlay"
+                    class="absolute inset-0 video-overlay opacity-0 pointer-events-none flex items-center justify-center">
                     <div class="text-white text-center">
                         <i data-lucide="volume-2" class="w-10 h-10 mx-auto mb-2 animate-pulse"></i>
                         <p class="text-[10px] font-bold tracking-[0.2em] uppercase">Chế độ tập trung âm thanh</p>
@@ -95,8 +145,9 @@
             </div>
 
             <div class="flex-1 relative flex flex-col p-6 overflow-hidden">
-                
-                <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+
+                <div id="empty-state"
+                    class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
                     <div class="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mb-4">
                         <i data-lucide="heart" class="w-8 h-8 text-teal-500 animate-pulse"></i>
                     </div>
@@ -108,11 +159,14 @@
                     <div id="content-yoga" class="tab-pane hidden flex flex-col items-center pt-2 h-full">
 
 
-                        <div class="bg-teal-50 rounded-3xl p-6 w-full max-w-xs text-center border border-teal-100 shadow-sm mb-4">
+                        <div
+                            class="bg-teal-50 rounded-3xl p-6 w-full max-w-xs text-center border border-teal-100 shadow-sm mb-4">
                             <div class="text-6xl font-black text-teal-600 mb-1" id="yoga-timer-display">05:00</div>
-                            <p class="text-[9px] text-teal-500 font-bold uppercase tracking-widest mb-4">Thời gian còn lại</p>
-                            
-                            <button onclick="toggleYogaTimer()" id="btn-yoga-action" class="w-full py-3.5 bg-teal-600 text-white rounded-2xl font-black shadow-lg shadow-teal-100 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm">
+                            <p class="text-[9px] text-teal-500 font-bold uppercase tracking-widest mb-4">Thời gian còn
+                                lại</p>
+
+                            <button onclick="toggleYogaTimer()" id="btn-yoga-action"
+                                class="w-full py-3.5 bg-teal-600 text-white rounded-2xl font-black shadow-lg shadow-teal-100 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm">
                                 <i data-lucide="play" class="fill-current w-4 h-4"></i> BẮT ĐẦU TẬP
                             </button>
                         </div>
@@ -120,14 +174,20 @@
 
                     <div id="content-breath" class="tab-pane hidden flex flex-col items-center justify-center h-full">
                         <div class="relative flex items-center justify-center mb-8">
-                            <div id="b-circle-outer" class="w-56 h-56 bg-teal-50 rounded-full transition-all duration-[4000ms] ease-in-out"></div>
-                            <div id="b-circle-inner" class="absolute w-36 h-36 bg-teal-200 rounded-full transition-all duration-[4000ms] ease-in-out"></div>
+                            <div id="b-circle-outer"
+                                class="w-56 h-56 bg-teal-50 rounded-full transition-all duration-[4000ms] ease-in-out">
+                            </div>
+                            <div id="b-circle-inner"
+                                class="absolute w-36 h-36 bg-teal-200 rounded-full transition-all duration-[4000ms] ease-in-out">
+                            </div>
                             <div class="absolute flex flex-col items-center">
-                                <span id="breath-text" class="text-xl font-black text-teal-700 uppercase">Hít Thở 4-4</span>
+                                <span id="breath-text" class="text-xl font-black text-teal-700 uppercase">Hít Thở
+                                    4-4</span>
                                 <span id="breath-timer" class="text-2xl text-teal-500 font-black">4s</span>
                             </div>
                         </div>
-                        <button onclick="startPrepareBreath()" id="btn-breath-action" class="px-10 py-4 bg-teal-600 text-white rounded-2xl font-black shadow-lg shadow-teal-100 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3">
+                        <button onclick="startPrepareBreath()" id="btn-breath-action"
+                            class="px-10 py-4 bg-teal-600 text-white rounded-2xl font-black shadow-lg shadow-teal-100 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3">
                             <i data-lucide="play" class="fill-current w-5 h-5"></i> BẮT ĐẦU CHUẨN BỊ (10s)
                         </button>
                     </div>
@@ -136,8 +196,10 @@
 
                         <div class="bg-orange-50 rounded-3xl p-6 w-full max-w-xs border border-orange-100 shadow-sm">
                             <div class="text-6xl font-black text-orange-600 mb-2" id="back-timer-display">07:00</div>
-                            <p class="text-[9px] text-orange-500 font-bold uppercase tracking-widest mb-4">Thời gian tập</p>
-                            <button onclick="toggleBackTimer()" id="btn-back-action" class="w-full py-3 bg-orange-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-transform active:scale-95">
+                            <p class="text-[9px] text-orange-500 font-bold uppercase tracking-widest mb-4">Thời gian tập
+                            </p>
+                            <button onclick="toggleBackTimer()" id="btn-back-action"
+                                class="w-full py-3 bg-orange-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-transform active:scale-95">
                                 <i data-lucide="play" class="w-4 h-4 fill-current"></i> BẮT ĐẦU TẬP
                             </button>
                         </div>
@@ -158,44 +220,60 @@
                         </div>
 
                         <div class="bg-slate-50 p-4 rounded-2xl border border-dashed border-slate-200 w-full max-w-sm">
-                            <p class="text-[11px] text-slate-500 italic">"Hãy thực hiện bài tập này sau mỗi 2 giờ gõ bàn phím liên tục."</p>
+                            <p class="text-[11px] text-slate-500 italic">"Hãy thực hiện bài tập này sau mỗi 2 giờ gõ bàn
+                                phím liên tục."</p>
                         </div>
                     </div>
 
-                    <div id="content-meditation" class="tab-pane hidden flex flex-col items-center justify-center h-full text-center">
+                    <div id="content-meditation"
+                        class="tab-pane hidden flex flex-col items-center justify-center h-full text-center">
                         <div class="bg-indigo-50 p-6 rounded-3xl border border-indigo-100 max-w-sm">
                             <i data-lucide="flower-2" class="w-8 h-8 text-indigo-500 mx-auto mb-3"></i>
-                            <p class="text-indigo-900 font-medium text-sm italic leading-relaxed">"Hãy thả lỏng vai, nhắm mắt lại và để tâm trí tự do."</p>
+                            <p class="text-indigo-900 font-medium text-sm italic leading-relaxed">"Hãy thả lỏng vai,
+                                nhắm mắt lại và để tâm trí tự do."</p>
                         </div>
                     </div>
 
-                    <div id="content-eye" class="tab-pane hidden flex flex-col items-center justify-center h-full text-center p-4">
-                        <div class="bg-slate-900 p-8 rounded-[3rem] shadow-2xl max-w-sm w-full border border-slate-800 relative overflow-hidden group">
-                            <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl"></div>
-                            
-                            <i data-lucide="eye" class="w-14 h-14 text-green-400 mx-auto mb-6 group-hover:scale-110 transition-transform"></i>
-                            
-                            <h3 class="text-white font-black text-xl mb-4 uppercase tracking-tighter">Quy tắc 20 - 20 - 20</h3>
-                            
-                            <div class="space-y-4 text-left">
-                                <div class="flex items-start gap-3">
-                                    <div class="bg-green-500/20 p-2 rounded-lg text-green-400 font-bold text-[10px] min-w-[45px] text-center">20p</div>
-                                    <p class="text-slate-300 text-xs leading-snug">Cứ sau mỗi <span class="text-green-400 font-bold">20 phút</span> làm việc liên tục với màn hình.</p>
-                                </div>
-                                
-                                <div class="flex items-start gap-3">
-                                    <div class="bg-green-500/20 p-2 rounded-lg text-green-400 font-bold text-[10px] min-w-[45px] text-center">20ft</div>
-                                    <p class="text-slate-300 text-xs leading-snug">Hãy nhìn vào một vật cách xa <span class="text-green-400 font-bold">20 feet (khoảng 6 mét)</span>.</p>
-                                </div>
-                                
-                                <div class="flex items-start gap-3">
-                                    <div class="bg-green-500/20 p-2 rounded-lg text-green-400 font-bold text-[10px] min-w-[45px] text-center">20s</div>
-                                    <p class="text-slate-300 text-xs leading-snug">Để mắt nghỉ ngơi và nhìn vật đó trong <span class="text-green-400 font-bold">20 giây</span>.</p>
-                                </div>
+                    <div id="content-eye"
+                        class="tab-pane hidden flex flex-col items-center justify-center h-full text-center p-4">
+                        <div
+                            class="bg-slate-900 p-8 rounded-[3rem] shadow-2xl max-w-sm w-full border border-slate-800 relative overflow-hidden group">
+                            <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl">
                             </div>
 
-                            
+                            <i data-lucide="eye"
+                                class="w-14 h-14 text-green-400 mx-auto mb-6 group-hover:scale-110 transition-transform"></i>
 
+                            <h3 class="text-white font-black text-xl mb-4 uppercase tracking-tighter">Quy tắc 20 - 20 -
+                                20</h3>
+
+                            <div class="space-y-4 text-left">
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="bg-green-500/20 p-2 rounded-lg text-green-400 font-bold text-[10px] min-w-[45px] text-center">
+                                        20p</div>
+                                    <p class="text-slate-300 text-xs leading-snug">Cứ sau mỗi <span
+                                            class="text-green-400 font-bold">20 phút</span> làm việc liên tục với màn
+                                        hình.</p>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="bg-green-500/20 p-2 rounded-lg text-green-400 font-bold text-[10px] min-w-[45px] text-center">
+                                        20ft</div>
+                                    <p class="text-slate-300 text-xs leading-snug">Hãy nhìn vào một vật cách xa <span
+                                            class="text-green-400 font-bold">20 feet (khoảng 6 mét)</span>.</p>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="bg-green-500/20 p-2 rounded-lg text-green-400 font-bold text-[10px] min-w-[45px] text-center">
+                                        20s</div>
+                                    <p class="text-slate-300 text-xs leading-snug">Để mắt nghỉ ngơi và nhìn vật đó trong
+                                        <span class="text-green-400 font-bold">20 giây</span>.
+                                    </p>
+                                </div>
+                            </div>
                             <div class="mt-8 pt-6 border-t border-slate-800">
                                 <p class="text-[10px] text-slate-500 italic flex items-center justify-center gap-2">
                                     <i data-lucide="sparkles" class="w-3 h-3 text-yellow-500"></i>
@@ -204,11 +282,13 @@
                             </div>
                         </div>
                     </div>
-                    <div id="content-music" class="tab-pane hidden flex flex-col items-center justify-center h-full text-center">
+                    <div id="content-music"
+                        class="tab-pane hidden flex flex-col items-center justify-center h-full text-center">
                         <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 max-w-sm">
                             <i data-lucide="headphones" class="w-8 h-8 text-slate-400 mx-auto mb-3"></i>
                             <p class="text-slate-600 font-bold mb-1">Đang phát nhạc Focus</p>
-                            <p class="text-[10px] text-slate-400 italic">"Âm nhạc giúp đồng bộ nhịp não, đưa bạn vào trạng thái Flow."</p>
+                            <p class="text-[10px] text-slate-400 italic">"Âm nhạc giúp đồng bộ nhịp não, đưa bạn vào
+                                trạng thái Flow."</p>
                         </div>
                     </div>
                 </div>
@@ -218,174 +298,174 @@
 </div>
 
 <script>
-    // --- GIỮ NGUYÊN BỘ LOGIC CŨ ---
+
     let yogaInterval, breathInterval;
     let isYogaRunning = false, isBreathing = false;
     let yogaTime = 300;
 
-function switchTab(tab, vId) {
-    // Dừng tất cả các logic đang chạy
-    stopYogaTimer(); 
-    stopBreathing();
-    resetBackTimer(); // QUAN TRỌNG: Dừng timer thắt lưng khi rời tab hoặc chuyển tab
+    function switchTab(tab, vId) {
 
-    document.getElementById('empty-state').classList.add('hidden');
-    document.getElementById('content-area').classList.remove('hidden');
-    document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
-    document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('tab-active'));
+        stopYogaTimer();
+        stopBreathing();
+        resetBackTimer();
 
-    document.getElementById(`btn-${tab}`).classList.add('tab-active');
-    
-    const targetContent = document.getElementById(`content-${tab}`);
-    if (targetContent) targetContent.classList.remove('hidden');
+        document.getElementById('empty-state').classList.add('hidden');
+        document.getElementById('content-area').classList.remove('hidden');
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+        document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('tab-active'));
 
-    const wrapper = document.getElementById('video-wrapper');
-    const player = document.getElementById('youtube-player');
-    
-    if (vId && !['breath', 'eye'].includes(tab)) {
-        wrapper.classList.remove('hidden');
-        const cleanId = vId.split(/[?&]/)[0];
-        player.src = `https://www.youtube-nocookie.com/embed/${cleanId}?autoplay=1&mute=0&rel=0&enablejsapi=1&origin=${window.location.origin}`;
-    } else {
-        wrapper.classList.add('hidden');
-        player.src = "";
-    }
+        document.getElementById(`btn-${tab}`).classList.add('tab-active');
 
-    if (tab === 'breath') {
-        // Không tự chạy nữa mà đợi bấm nút chuẩn bị
-    }
-    lucide.createIcons();
-}
-let prepareInterval; // Khai báo thêm biến để quản lý đếm ngược 10s
-let backInterval;
-let isBackRunning = false;
-let backTime = 420; // 7 phút (7 * 60 = 420 giây)
+        const targetContent = document.getElementById(`content-${tab}`);
+        if (targetContent) targetContent.classList.remove('hidden');
 
-function startPrepareBreath() {
-    if (isBreathing) return;
-    
-    const btn = document.getElementById('btn-breath-action');
-    const text = document.getElementById('breath-text');
-    const timerDisplay = document.getElementById('breath-timer');
-    
-    btn.classList.add('hidden'); // Ẩn nút sau khi bấm
-    isBreathing = true;
-    
-    let prepareTime = 10;
-    text.innerText = "Sẵn sàng";
-    timerDisplay.innerText = prepareTime + 's';
+        const wrapper = document.getElementById('video-wrapper');
+        const player = document.getElementById('youtube-player');
 
-    prepareInterval = setInterval(() => {
-        prepareTime--;
-        if (prepareTime > 0) {
-            timerDisplay.innerText = prepareTime + 's';
+        if (vId && !['breath', 'eye'].includes(tab)) {
+            wrapper.classList.remove('hidden');
+            const cleanId = vId.split(/[?&]/)[0];
+            player.src = `https://www.youtube-nocookie.com/embed/${cleanId}?autoplay=1&mute=0&rel=0&enablejsapi=1&origin=${window.location.origin}`;
         } else {
-            clearInterval(prepareInterval);
-            runMainBreathCycle(); // Chuyển sang vòng lặp chính
+            wrapper.classList.add('hidden');
+            player.src = "";
         }
-    }, 1000);
-}
-function toggleBackTimer() {
-    const btn = document.getElementById('btn-back-action');
-    const display = document.getElementById('back-timer-display');
-    
-    if (isBackRunning) {
-        // Lệnh Tạm dừng
-        clearInterval(backInterval);
-        btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-current"></i> TIẾP TỤC';
-    } else {
-        // Lệnh Bắt đầu
-        isBackRunning = true;
-        btn.innerHTML = '<i data-lucide="pause" class="w-4 h-4 fill-current"></i> TẠM DỪNG';
-        
-        backInterval = setInterval(() => {
-            backTime--;
-            
-            // Chuyển đổi giây thành định dạng MM:SS
-            let m = Math.floor(backTime / 60).toString().padStart(2, '0');
-            let s = (backTime % 60).toString().padStart(2, '0');
-            display.innerText = `${m}:${s}`;
 
-            if (backTime <= 0) {
-                clearInterval(backInterval);
-                isBackRunning = false;
-                alert("Chúc mừng! Cột sống của bạn đã được giải tỏa căng thẳng.");
-                resetBackTimer();
+        if (tab === 'breath') {
+
+        }
+        lucide.createIcons();
+    }
+    let prepareInterval;
+    let backInterval;
+    let isBackRunning = false;
+    let backTime = 420;
+
+    function startPrepareBreath() {
+        if (isBreathing) return;
+
+        const btn = document.getElementById('btn-breath-action');
+        const text = document.getElementById('breath-text');
+        const timerDisplay = document.getElementById('breath-timer');
+
+        btn.classList.add('hidden');
+        isBreathing = true;
+
+        let prepareTime = 10;
+        text.innerText = "Sẵn sàng";
+        timerDisplay.innerText = prepareTime + 's';
+
+        prepareInterval = setInterval(() => {
+            prepareTime--;
+            if (prepareTime > 0) {
+                timerDisplay.innerText = prepareTime + 's';
+            } else {
+                clearInterval(prepareInterval);
+                runMainBreathCycle();
             }
         }, 1000);
     }
-    isBackRunning = !isBackRunning; // Đảo trạng thái flag
-    lucide.createIcons(); // Cập nhật lại icon Play/Pause
-}
+    function toggleBackTimer() {
+        const btn = document.getElementById('btn-back-action');
+        const display = document.getElementById('back-timer-display');
 
-// Hàm Reset riêng cho Cột sống
-function resetBackTimer() {
-    clearInterval(backInterval);
-    isBackRunning = false;
-    backTime = 420;
-    document.getElementById('back-timer-display').innerText = "07:00";
-    const btn = document.getElementById('btn-back-action');
-    if(btn) btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-current"></i> BẮT ĐẦU TẬP';
-}
+        if (isBackRunning) {
 
-function runMainBreathCycle() {
-    const text = document.getElementById('breath-text');
-    const timerDisplay = document.getElementById('breath-timer');
-    const outer = document.getElementById('b-circle-outer');
-    const inner = document.getElementById('b-circle-inner');
-
-    let step = 0; // 0: Hít, 1: Giữ, 2: Thở, 3: Giữ
-    let timeLeft = 4;
-
-    // Chạy nhịp Hít vào đầu tiên ngay lập tức
-    text.innerText = "Hít vào";
-    timerDisplay.innerText = "4s";
-    outer.style.transform = "scale(1.3)";
-    inner.style.transform = "scale(1.2)";
-
-    breathInterval = setInterval(() => {
-        timeLeft--;
-        if (timeLeft > 0) {
-            timerDisplay.innerText = timeLeft + 's';
+            clearInterval(backInterval);
+            btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-current"></i> TIẾP TỤC';
         } else {
-            timeLeft = 4;
-            step = (step + 1) % 4;
-            timerDisplay.innerText = "4s";
 
-            switch(step) {
-                case 0: // HÍT VÀO
-                    text.innerText = "Hít vào";
-                    outer.style.transform = "scale(1.3)";
-                    inner.style.transform = "scale(1.2)";
-                    break;
-                case 1: // GIỮ
-                    text.innerText = "Nín thở";
-                    break;
-                case 2: // THỞ RA
-                    text.innerText = "Thở ra";
-                    outer.style.transform = "scale(1)";
-                    inner.style.transform = "scale(1)";
-                    break;
-                case 3: // GIỮ
-                    text.innerText = "Nín thở";
-                    break;
-            }
+            isBackRunning = true;
+            btn.innerHTML = '<i data-lucide="pause" class="w-4 h-4 fill-current"></i> TẠM DỪNG';
+
+            backInterval = setInterval(() => {
+                backTime--;
+
+
+                let m = Math.floor(backTime / 60).toString().padStart(2, '0');
+                let s = (backTime % 60).toString().padStart(2, '0');
+                display.innerText = `${m}:${s}`;
+
+                if (backTime <= 0) {
+                    clearInterval(backInterval);
+                    isBackRunning = false;
+                    alert("Chúc mừng! Cột sống của bạn đã được giải tỏa căng thẳng.");
+                    resetBackTimer();
+                }
+            }, 1000);
         }
-    }, 1000);
-}
+        isBackRunning = !isBackRunning;
+        lucide.createIcons();
+    }
 
-// Cập nhật hàm dừng để reset lại nút bấm
-function stopBreathing() {
-    clearInterval(breathInterval);
-    clearInterval(prepareInterval);
-    isBreathing = false;
-    
-    document.getElementById('btn-breath-action').classList.remove('hidden');
-    document.getElementById('breath-text').innerText = "Hít Thở 4-4";
-    document.getElementById('breath-timer').innerText = "4s";
-    document.getElementById('b-circle-outer').style.transform = "scale(1)";
-    document.getElementById('b-circle-inner').style.transform = "scale(1)";
-}
+
+    function resetBackTimer() {
+        clearInterval(backInterval);
+        isBackRunning = false;
+        backTime = 420;
+        document.getElementById('back-timer-display').innerText = "07:00";
+        const btn = document.getElementById('btn-back-action');
+        if (btn) btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-current"></i> BẮT ĐẦU TẬP';
+    }
+
+    function runMainBreathCycle() {
+        const text = document.getElementById('breath-text');
+        const timerDisplay = document.getElementById('breath-timer');
+        const outer = document.getElementById('b-circle-outer');
+        const inner = document.getElementById('b-circle-inner');
+
+        let step = 0;
+        let timeLeft = 4;
+
+
+        text.innerText = "Hít vào";
+        timerDisplay.innerText = "4s";
+        outer.style.transform = "scale(1.3)";
+        inner.style.transform = "scale(1.2)";
+
+        breathInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+                timerDisplay.innerText = timeLeft + 's';
+            } else {
+                timeLeft = 4;
+                step = (step + 1) % 4;
+                timerDisplay.innerText = "4s";
+
+                switch (step) {
+                    case 0:
+                        text.innerText = "Hít vào";
+                        outer.style.transform = "scale(1.3)";
+                        inner.style.transform = "scale(1.2)";
+                        break;
+                    case 1:
+                        text.innerText = "Nín thở";
+                        break;
+                    case 2:
+                        text.innerText = "Thở ra";
+                        outer.style.transform = "scale(1)";
+                        inner.style.transform = "scale(1)";
+                        break;
+                    case 3:
+                        text.innerText = "Nín thở";
+                        break;
+                }
+            }
+        }, 1000);
+    }
+
+
+    function stopBreathing() {
+        clearInterval(breathInterval);
+        clearInterval(prepareInterval);
+        isBreathing = false;
+
+        document.getElementById('btn-breath-action').classList.remove('hidden');
+        document.getElementById('breath-text').innerText = "Hít Thở 4-4";
+        document.getElementById('breath-timer').innerText = "4s";
+        document.getElementById('b-circle-outer').style.transform = "scale(1)";
+        document.getElementById('b-circle-inner').style.transform = "scale(1)";
+    }
 
     function toggleYogaTimer() {
         const btn = document.getElementById('btn-yoga-action');
@@ -396,10 +476,10 @@ function stopBreathing() {
         } else {
             yogaInterval = setInterval(() => {
                 yogaTime--;
-                let m = Math.floor(yogaTime / 60).toString().padStart(2,'0');
-                let s = (yogaTime % 60).toString().padStart(2,'0');
+                let m = Math.floor(yogaTime / 60).toString().padStart(2, '0');
+                let s = (yogaTime % 60).toString().padStart(2, '0');
                 display.innerText = `${m}:${s}`;
-                if(yogaTime <= 0) { clearInterval(yogaInterval); alert("Xong!"); }
+                if (yogaTime <= 0) { clearInterval(yogaInterval); alert("Xong!"); }
             }, 1000);
             btn.innerHTML = '<i data-lucide="pause" class="w-5 h-5"></i> TẠM DỪNG';
         }
@@ -407,13 +487,13 @@ function stopBreathing() {
         lucide.createIcons();
     }
 
-    function stopYogaTimer() { clearInterval(yogaInterval); isYogaRunning = false; yogaTime = 300; document.getElementById('yoga-timer-display').innerText="05:00"; }
+    function stopYogaTimer() { clearInterval(yogaInterval); isYogaRunning = false; yogaTime = 300; document.getElementById('yoga-timer-display').innerText = "05:00"; }
 
     window.addEventListener('keydown', (e) => {
         if (e.code === "Space") {
             e.preventDefault();
             const activeBtn = document.querySelector('.tab-active');
-            if(!activeBtn) return;
+            if (!activeBtn) return;
             const activeTab = activeBtn.id;
             if (activeTab === 'btn-yoga') toggleYogaTimer();
             if (activeTab === 'btn-breath') { isBreathing ? stopBreathing() : startBreathing(); }
